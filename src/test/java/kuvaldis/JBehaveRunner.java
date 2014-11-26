@@ -10,19 +10,18 @@ import org.jbehave.core.steps.ScanningStepsFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static java.util.Arrays.asList;
 import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
-import static org.jbehave.core.io.CodeLocations.codeLocationFromPath;
 
 public class JBehaveRunner extends JUnitStories {
 
     public JBehaveRunner() {
         Configuration configuration = new MostUsefulConfiguration().useStoryLoader(new LoadFromURL());
         useConfiguration(configuration);
-        useStepsFactory(new ScanningStepsFactory(configuration, "kuvaldis")  {
+        useStepsFactory(new ScanningStepsFactory(configuration, "kuvaldis") {
             private Map<Class<?>, Object> instances = new HashMap<>();
+
             @Override
             public Object createInstanceOfType(Class<?> type) {
                 if (instances.containsKey(type)) {

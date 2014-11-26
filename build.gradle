@@ -36,3 +36,5 @@ dependencies {
 }
 
 apply from: 'jmh.gradle'
+
+build.dependsOn 'jmh'
