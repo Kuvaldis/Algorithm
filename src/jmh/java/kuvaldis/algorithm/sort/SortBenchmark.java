@@ -8,14 +8,14 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class SortBenchmark {
 
     private int[] input1;
-//    private int[] input2;
-//    private int[] input3;
+    private int[] input100;
+    private int[] input10000;
 
     @Setup
     public void setup() {
-        input1 = random(100);
-//        input2 = random(100000);
-//        input3 = random(1000000000);
+        input1 = random(1);
+        input100 = random(100);
+        input10000 = random(10000);
     }
 
     private int[] random(int length) {
@@ -27,25 +27,19 @@ public abstract class SortBenchmark {
     }
 
     @Benchmark
-    @Measurement(iterations = 1, time = 1)
-    @Warmup(iterations = 1, time = 1, batchSize = 1)
-    public void run100() {
+    public void run1() {
         run(input1);
     }
 
-//    @Benchmark
-//    @Measurement(iterations = 1, time = 1)
-//    @Warmup(iterations = 1, time = 1, batchSize = 1)
-//    public void run100000() {
-//        run(input2);
-//    }
-//
-//    @Benchmark
-//    @Measurement(iterations = 1, time = 1)
-//    @Warmup(iterations = 1, time = 1, batchSize = 1)
-//    public void run1000000000() {
-//        run(input3);
-//    }
+    @Benchmark
+    public void run100() {
+        run(input100);
+    }
+
+    @Benchmark
+    public void run10000() {
+        run(input10000);
+    }
 
     protected abstract void run(int[] input);
 }

@@ -1,12 +1,12 @@
 jmh {
 //    include = 'some regular expression' // include pattern (regular expression) for benchmarks to be executed
 //    exclude = 'some regular expression' // exclude pattern (regular expression) for benchmarks to be executed
-//    iterations = 10 // Number of measurement iterations to do.
-//    benchmarkMode = 'thrpt' // Benchmark mode. Available modes are: [Throughput/thrpt, AverageTime/avgt, SampleTime/sample, SingleShotTime/ss, All/all]
+    iterations = 10 // Number of measurement iterations to do.
+    benchmarkMode = 'avgt' // Benchmark mode. Available modes are: [Throughput/thrpt, AverageTime/avgt, SampleTime/sample, SingleShotTime/ss, All/all]
     batchSize = 1 // Batch size: number of benchmark method calls per operation. (some benchmark modes can ignore this setting)
-    fork = 1 // How many times to forks a single benchmark. Use 0 to disable forking altogether
+    fork = 0 // How many times to forks a single benchmark. Use 0 to disable forking altogether
     failOnError = false // Should JMH fail immediately if any benchmark had experienced the unrecoverable error?
-    forceGC = true // Should JMH force GC between iterations?
+    forceGC = false // Should JMH force GC between iterations?
 //    jvm = 'myjvm' // Custom JVM to use when forking.
     jvmArgs = '-Xms512m -Xmx1024m'
 //    jvmArgsAppend = 'Custom JVM args to use when forking (append these)'
@@ -25,8 +25,8 @@ jmh {
     verbosity = 'NORMAL' // Verbosity mode. Available modes are: [SILENT, NORMAL, EXTRA]
     warmup = '1s' // Time to spend at each warmup iteration.
 //    warmupBatchSize = 10 // Warmup batch size: number of benchmark method calls per operation.
-    warmupForks = 1 // How many warmup forks to make for a single benchmark. 0 to disable warmup forks.
-//    warmupIterations = 10 // Number of warmup iterations to do.
+    warmupForks = 0 // How many warmup forks to make for a single benchmark. 0 to disable warmup forks.
+    warmupIterations = 10 // Number of warmup iterations to do.
     warmupMode = 'INDI' // Warmup mode for warming up selected benchmarks. Warmup modes are: [INDI, BULK, BULK_INDI].
 //    warmupBenchmarks = ['.*Warmup'] // Warmup benchmarks to include in the run in addition to already selected. JMH will not measure these benchmarks, but only use them for the warmup.
     zip64 = true // Use ZIP64 format for bigger archives
