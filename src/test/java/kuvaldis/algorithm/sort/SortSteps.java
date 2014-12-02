@@ -14,7 +14,8 @@ import java.util.stream.IntStream;
 public class SortSteps {
 
     private static final Map<String, Class<? extends Sort>> ALGORITHMS = new HashMap<String, Class<? extends Sort>>() {{
-      put("insertionSort", InsertionSort.class);
+        put("insertionSort", InsertionSort.class);
+        put("selectionSort", SelectionSort.class);
     }};
 
     private Sort sort;

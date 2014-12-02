@@ -27,19 +27,23 @@ public abstract class SortBenchmark {
     }
 
     @Benchmark
-    public void run1() {
+    public void run1() throws InstantiationException, IllegalAccessException {
         run(input1);
     }
 
     @Benchmark
-    public void run100() {
+    public void run100() throws InstantiationException, IllegalAccessException {
         run(input100);
     }
 
     @Benchmark
-    public void run10000() {
+    public void run10000() throws InstantiationException, IllegalAccessException {
         run(input10000);
     }
 
-    protected abstract void run(int[] input);
+    private void run(final int[] input) throws IllegalAccessException, InstantiationException {
+        instance().newInstance().sort(input);
+    }
+
+    protected abstract Class<? extends Sort> instance();
 }

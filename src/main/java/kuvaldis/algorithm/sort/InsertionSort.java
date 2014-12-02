@@ -2,8 +2,9 @@ package kuvaldis.algorithm.sort;
 
 import java.util.stream.IntStream;
 
-public class InsertionSort implements Sort {
+public class InsertionSort extends Sort {
 
+    @Override
     public int[] sort(final int[] input) {
         final int[] output = new int[input.length];
         System.arraycopy(input, 0, output, 0, output.length);
