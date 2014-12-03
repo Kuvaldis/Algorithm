@@ -1,9 +1,9 @@
 package kuvaldis.algorithm.sort;
 
-public class InsertionSortBenchmark extends SortBenchmark {
+public class BubbleSortBenchmark extends SortBenchmark {
 
     @Override
     protected Class<? extends Sort> instanceClass() {
-        return InsertionSort.class;
+        return BubbleSort.class;
     }
 }

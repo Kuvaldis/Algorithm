@@ -14,14 +14,15 @@ import java.util.stream.IntStream;
 public class SortSteps {
 
     private static final Map<String, Class<? extends Sort>> ALGORITHMS = new HashMap<String, Class<? extends Sort>>() {{
-        put("insertionSort", InsertionSort.class);
-        put("selectionSort", SelectionSort.class);
+        put("insertion", InsertionSort.class);
+        put("selection", SelectionSort.class);
+        put("bubble", BubbleSort.class);
     }};
 
     private Sort sort;
     private int[] sorted;
 
-    @Given("algorithm $name")
+    @Given("algorithm $name sort")
     public void algorithm(final String name) throws IllegalAccessException, InstantiationException {
         sort = ALGORITHMS.get(name).newInstance();
     }

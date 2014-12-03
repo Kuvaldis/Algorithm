@@ -42,8 +42,8 @@ public abstract class SortBenchmark {
     }
 
     private void run(final int[] input) throws IllegalAccessException, InstantiationException {
-        instance().newInstance().sort(input);
+        instanceClass().newInstance().sort(input);
     }
 
-    protected abstract Class<? extends Sort> instance();
+    protected abstract Class<? extends Sort> instanceClass();
 }
