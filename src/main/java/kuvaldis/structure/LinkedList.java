@@ -1,9 +1,8 @@
 package kuvaldis.structure;
 
 import lombok.Data;
+import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
 
 public class LinkedList<E> {
@@ -27,7 +26,13 @@ public class LinkedList<E> {
     }
 
     public int search(final E item) {
-        return -1;
+        return Stream.iterate(new IterationElement(0, first),
+                iteration -> new IterationElement(iteration.i + 1, iteration.element.next))
+                .limit(size)
+                .filter(iteration -> iteration.element.item.equals(item))
+                .mapToInt(IterationElement::getI)
+                .findFirst()
+                .orElse(-1);
     }
 
     public int delete(final E item) {
@@ -47,6 +52,13 @@ public class LinkedList<E> {
     }
 
     @Data
+    private class IterationElement {
+        private final int i;
+        private final Element element;
+    }
+
+    @Data
+    @ToString(of = "item")
     private class Element {
         private final E item;
         private Element next;
