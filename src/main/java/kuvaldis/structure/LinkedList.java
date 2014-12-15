@@ -3,6 +3,7 @@ package kuvaldis.structure;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class LinkedList<E> {
@@ -25,7 +26,7 @@ public class LinkedList<E> {
         return true;
     }
 
-    public int search(final E item) {
+    public int index(final E item) {
         return Stream.iterate(new IterationElement(0, first),
                 iteration -> new IterationElement(iteration.i + 1, iteration.element.next))
                 .limit(size)
@@ -35,8 +36,17 @@ public class LinkedList<E> {
                 .orElse(-1);
     }
 
-    public int delete(final E item) {
-        return -1;
+    public boolean delete(final E item) {
+        Optional<Element> found = Stream.iterate(first, element -> element.next)
+                .limit(size)
+                .filter(element -> element.item.equals(item))
+                .findFirst();
+        found.ifPresent(element -> {
+            element.prev.next = element.next;
+            element.next.prev = element.prev;
+            element.next = element.prev = null;
+        });
+        return found.isPresent();
     }
 
     public int size() {

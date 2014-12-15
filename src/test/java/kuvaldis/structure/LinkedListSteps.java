@@ -1,23 +1,18 @@
 package kuvaldis.structure;
 
-import kuvaldis.algorithm.sort.BubbleSort;
-import kuvaldis.algorithm.sort.InsertionSort;
-import kuvaldis.algorithm.sort.SelectionSort;
-import kuvaldis.algorithm.sort.Sort;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.IntStream;
 
 public class LinkedListSteps {
 
     private LinkedList<Integer> list;
     private Integer index;
+    private boolean deleted;
 
     @Given("empty integer linked list")
     public LinkedList<Integer> emptyList() {
@@ -34,9 +29,14 @@ public class LinkedListSteps {
         list.add(value);
     }
 
-    @When("search $value")
-    public void search(final Integer value) {
-        index = list.search(value);
+    @When("index $value")
+    public void index(final Integer value) {
+        index = list.index(value);
+    }
+
+    @When("delete $value")
+    public void delete(final Integer value) {
+        deleted = list.delete(value);
     }
 
     @Then("items are $items")
@@ -47,6 +47,11 @@ public class LinkedListSteps {
     @Then("found index is $correctIndex")
     public void checkIndex(final Integer correctIndex) {
         Assert.assertEquals(correctIndex, index);
+    }
+
+    @Then("element deleted: $correctDeleted")
+    public void checkDeleted(final Boolean correctDeleted) {
+        Assert.assertEquals(correctDeleted, deleted);
     }
 
     private Integer[] convertToArray(List<Integer> input) {
