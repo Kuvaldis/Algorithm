@@ -16,7 +16,7 @@ public class StackSteps {
     private List<Integer> popped;
 
     @Given("empty integer stack")
-    public Stack<Integer> emptyList() {
+    public Stack<Integer> emptyStack() {
         popped = new ArrayList<>();
         return stack = new Stack<>();
     }

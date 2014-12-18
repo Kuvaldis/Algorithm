@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class Stack<E> {
 
@@ -14,7 +13,7 @@ public class Stack<E> {
     public void push(final E newItem) {
         final Element newElement = new Element(newItem);
         if (top != null) {
-            newElement.next = top;
+            newElement.setNext(top);
         }
         top = newElement;
         size++;
@@ -22,7 +21,7 @@ public class Stack<E> {
 
     public E pop() {
         final Element oldTop = top;
-        Optional<E> optional = Optional.ofNullable(oldTop).map(it -> it.item);
+        Optional<E> optional = Optional.ofNullable(oldTop).map(Element::getItem);
         if (optional.isPresent()) {
             top = top.getNext();
             size--;
