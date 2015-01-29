@@ -5,19 +5,24 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
+import org.reflections.Reflections;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class SortSteps {
 
-    private static final Map<String, Class<? extends Sort>> ALGORITHMS = new HashMap<String, Class<? extends Sort>>() {{
-        put("insertion", InsertionSort.class);
-        put("selection", SelectionSort.class);
-        put("bubble", BubbleSort.class);
-    }};
+    private static String getSortName(final Class cls) {
+        return cls.getSimpleName().replaceAll("Sort", "").toLowerCase();
+    }
+
+    private static final Map<String, Class<? extends Sort>> ALGORITHMS =
+            new Reflections("kuvaldis.algorithm.sort").getSubTypesOf(Sort.class).stream()
+                    .collect(Collectors.toMap(SortSteps::getSortName, Function.identity()));
 
     private Sort sort;
     private int[] sorted;
