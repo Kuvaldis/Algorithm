@@ -25,33 +25,33 @@ public class GraphUtilsTest {
 
         Vertex vertex = graph.getVertex(1);
         assertNotNull(vertex);
-        assertEquals(vertex.getNumber(), 1);
-        assertEquals(edgeNumbers(vertex), Arrays.asList(2, 5, 6));
+        assertEquals(1, vertex.getNumber());
+        assertEquals(Arrays.asList(2, 5, 6), edgeNumbers(vertex));
 
         vertex = graph.getVertex(2);
         assertNotNull(vertex);
-        assertEquals(vertex.getNumber(), 2);
-        assertEquals(edgeNumbers(vertex), Arrays.asList(1, 3, 5));
+        assertEquals(2, vertex.getNumber());
+        assertEquals(Arrays.asList(1, 3, 5), edgeNumbers(vertex));
 
         vertex = graph.getVertex(3);
         assertNotNull(vertex);
-        assertEquals(vertex.getNumber(), 3);
-        assertEquals(edgeNumbers(vertex), Arrays.asList(2, 4));
+        assertEquals(3, vertex.getNumber());
+        assertEquals(Arrays.asList(2, 4), edgeNumbers(vertex));
 
         vertex = graph.getVertex(4);
         assertNotNull(vertex);
-        assertEquals(vertex.getNumber(), 4);
-        assertEquals(edgeNumbers(vertex), Arrays.asList(3, 5));
+        assertEquals(4, vertex.getNumber());
+        assertEquals(Arrays.asList(3, 5), edgeNumbers(vertex));
 
         vertex = graph.getVertex(5);
         assertNotNull(vertex);
-        assertEquals(vertex.getNumber(), 5);
-        assertEquals(edgeNumbers(vertex), Arrays.asList(1, 2 ,4));
+        assertEquals(5, vertex.getNumber());
+        assertEquals(Arrays.asList(1, 2, 4), edgeNumbers(vertex));
 
         vertex = graph.getVertex(6);
         assertNotNull(vertex);
-        assertEquals(vertex.getNumber(), 6);
-        assertEquals(edgeNumbers(vertex), Arrays.asList(1));
+        assertEquals(6, vertex.getNumber());
+        assertEquals(Arrays.asList(1), edgeNumbers(vertex));
     }
 
     private List<Integer> edgeNumbers(Vertex vertex) {
