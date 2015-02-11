@@ -8,7 +8,7 @@ import java.util.Iterator;
 public abstract class AbstractSearch<T> implements Search<T> {
 
     @Override
-    public Search<T> search(final Graph graph, final Integer rootVertexNumber) {
+    public final Search<T> search(final Graph graph, final Integer rootVertexNumber) {
         final SearchSequence sequence = sequence();
         final Vertex rootVertex = graph.getVertex(rootVertexNumber);
         sequence.put(rootVertex);
@@ -17,7 +17,7 @@ public abstract class AbstractSearch<T> implements Search<T> {
             final Vertex v = sequence.get();
             preProcessVertex(v);
             v.setProcessed(true);
-            final Iterator<Vertex> edgesIterator = v.edgesIterator();
+            final Iterator<Vertex> edgesIterator = edgesIterator(v);
             edgesIterator.forEachRemaining(y -> {
                 if (!y.isProcessed()) {
                     processEdge(v, y);
@@ -34,6 +34,8 @@ public abstract class AbstractSearch<T> implements Search<T> {
     }
 
     protected abstract SearchSequence sequence();
+
+    protected abstract Iterator<Vertex> edgesIterator(Vertex vertex);
 
     protected abstract void preProcessVertex(Vertex vertex);
 

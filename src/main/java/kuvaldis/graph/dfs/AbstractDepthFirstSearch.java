@@ -1,40 +1,41 @@
-package kuvaldis.graph.bfs;
+package kuvaldis.graph.dfs;
 
 import kuvaldis.graph.AbstractSearch;
 import kuvaldis.graph.SearchSequence;
 import kuvaldis.graph.domain.Vertex;
 
 import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Queue;
 
-public abstract class AbstractBreadthFirstSearch<T> extends AbstractSearch<T> {
+public abstract class AbstractDepthFirstSearch<T> extends AbstractSearch<T> {
+
     @Override
     protected final SearchSequence sequence() {
         return new SearchSequence() {
 
-            final Queue<Vertex> vertexQueue = new ArrayDeque<>();
+            final Deque<Vertex> vertexStack = new ArrayDeque<>();
 
             @Override
             public void put(Vertex vertex) {
-                vertexQueue.offer(vertex);
+                vertexStack.push(vertex);
             }
 
             @Override
             public Vertex get() {
-                return vertexQueue.poll();
+                return vertexStack.pop();
             }
 
             @Override
             public boolean isEmpty() {
-                return vertexQueue.isEmpty();
+                return vertexStack.isEmpty();
             }
         };
     }
 
     @Override
-    protected final Iterator<Vertex> edgesIterator(Vertex vertex) {
-        return vertex.edgesIterator();
+    protected Iterator<Vertex> edgesIterator(Vertex vertex) {
+        return vertex.edgesDescendingIterator();
     }
 }

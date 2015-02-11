@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 @Data
@@ -14,7 +15,7 @@ public class Vertex {
     private boolean discovered;
     private Vertex parent;
     @Getter(AccessLevel.PRIVATE)
-    private List<Vertex> edges = new ArrayList<>();
+    private LinkedList<Vertex> edges = new LinkedList<>();
 
     public void addEdge(final Vertex vertex) {
         edges.add(vertex);
@@ -22,5 +23,9 @@ public class Vertex {
 
     public Iterator<Vertex> edgesIterator() {
         return edges.iterator();
+    }
+
+    public Iterator<Vertex> edgesDescendingIterator() {
+        return edges.descendingIterator();
     }
 }
