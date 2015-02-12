@@ -2,6 +2,7 @@ package kuvaldis.graph.bfs;
 
 import kuvaldis.graph.AbstractSearch;
 import kuvaldis.graph.SearchSequence;
+import kuvaldis.graph.domain.Graph;
 import kuvaldis.graph.domain.Vertex;
 
 import java.util.ArrayDeque;
@@ -10,6 +11,12 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public abstract class AbstractBreadthFirstSearch<T> extends AbstractSearch<T> {
+
+
+    public AbstractBreadthFirstSearch(Graph graph, Integer rootNumber) {
+        super(graph, rootNumber);
+    }
+
     @Override
     protected final SearchSequence sequence() {
         return new SearchSequence() {

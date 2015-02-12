@@ -18,7 +18,7 @@ public class SimpleBreadthFirstSearchTest {
     @Test
     public void testSearch() throws IOException {
         final Graph graph = GraphUtils.fromResource("graph.txt");
-        final List<Vertex> result = new SimpleBreadthFirstSearch().search(graph, 1).result();
+        final List<Vertex> result = new SimpleBreadthFirstSearch(graph, 1).search().result();
         assertEquals(Arrays.asList(1, 2, 5, 6, 3, 4), result.stream().map(Vertex::getNumber).collect(Collectors.toList()));
     }
 }

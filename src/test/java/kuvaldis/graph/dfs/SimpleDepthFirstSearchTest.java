@@ -17,7 +17,7 @@ public class SimpleDepthFirstSearchTest {
     @Test
     public void testSearch() throws IOException {
         final Graph graph = GraphUtils.fromResource("graph.txt");
-        final List<Vertex> result = new SimpleDepthFirstSearch().search(graph, 1).result();
+        final List<Vertex> result = new SimpleDepthFirstSearch(graph, 1).search().result();
         assertEquals(Arrays.asList(1, 2, 3, 4, 5, 6), result.stream().map(Vertex::getNumber).collect(Collectors.toList()));
     }
 }

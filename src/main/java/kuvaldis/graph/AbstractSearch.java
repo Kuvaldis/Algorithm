@@ -7,10 +7,18 @@ import java.util.Iterator;
 
 public abstract class AbstractSearch<T> implements Search<T> {
 
+    protected final Integer rootNumber;
+    protected final Graph graph;
+
+    public AbstractSearch(Graph graph, Integer rootNumber) {
+        this.rootNumber = rootNumber;
+        this.graph = graph;
+    }
+
     @Override
-    public final Search<T> search(final Graph graph, final Integer rootVertexNumber) {
+    public final Search<T> search() {
         final SearchSequence sequence = sequence();
-        final Vertex rootVertex = graph.getVertex(rootVertexNumber);
+        final Vertex rootVertex = graph.getVertex(rootNumber);
         sequence.put(rootVertex);
         rootVertex.setDiscovered(true);
         while (!sequence.isEmpty()) {
