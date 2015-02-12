@@ -1,5 +1,6 @@
-package kuvaldis.graph.bfs;
+package kuvaldis.graph.application;
 
+import kuvaldis.graph.bfs.AbstractBreadthFirstSearch;
 import kuvaldis.graph.domain.Graph;
 import kuvaldis.graph.domain.Vertex;
 

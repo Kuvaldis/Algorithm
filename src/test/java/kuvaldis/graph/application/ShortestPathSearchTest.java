@@ -1,6 +1,7 @@
-package kuvaldis.graph.bfs;
+package kuvaldis.graph.application;
 
 import kuvaldis.graph.GraphUtils;
+import kuvaldis.graph.application.ShortestPathSearch;
 import kuvaldis.graph.domain.Graph;
 import kuvaldis.graph.domain.Vertex;
 import org.junit.Test;
