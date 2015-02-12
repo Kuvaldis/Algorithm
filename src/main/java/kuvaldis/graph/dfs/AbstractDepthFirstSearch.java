@@ -43,4 +43,19 @@ public abstract class AbstractDepthFirstSearch<T> extends AbstractSearch<T> {
     protected Iterator<Vertex> edgesIterator(Vertex vertex) {
         return vertex.edgesDescendingIterator();
     }
+
+    @Override
+    protected boolean preProcessVertex(Vertex vertex) {
+        return true;
+    }
+
+    @Override
+    protected boolean processEdge(Vertex v, Vertex y) {
+        return true;
+    }
+
+    @Override
+    protected boolean postProcessVertex(Vertex vertex) {
+        return true;
+    }
 }

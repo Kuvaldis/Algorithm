@@ -9,6 +9,7 @@ import java.util.List;
 
 @Data
 @ToString(exclude = {"edges"})
+@EqualsAndHashCode(of = {"number"})
 public class Vertex {
     private final int number;
     private boolean processed;

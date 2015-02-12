@@ -15,18 +15,8 @@ public class SimpleDepthFirstSearch extends AbstractDepthFirstSearch<List<Vertex
     }
 
     @Override
-    protected void preProcessVertex(Vertex vertex) {
-        order.add(vertex);
-    }
-
-    @Override
-    protected void processEdge(Vertex v, Vertex y) {
-
-    }
-
-    @Override
-    protected void postProcessVertex(Vertex vertex) {
-
+    protected boolean preProcessVertex(Vertex vertex) {
+        return order.add(vertex);
     }
 
     @Override

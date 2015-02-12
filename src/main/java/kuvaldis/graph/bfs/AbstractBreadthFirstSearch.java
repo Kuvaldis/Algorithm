@@ -12,7 +12,6 @@ import java.util.Queue;
 
 public abstract class AbstractBreadthFirstSearch<T> extends AbstractSearch<T> {
 
-
     public AbstractBreadthFirstSearch(Graph graph, Integer rootNumber) {
         super(graph, rootNumber);
     }
@@ -43,5 +42,20 @@ public abstract class AbstractBreadthFirstSearch<T> extends AbstractSearch<T> {
     @Override
     protected final Iterator<Vertex> edgesIterator(Vertex vertex) {
         return vertex.edgesIterator();
+    }
+
+    @Override
+    protected boolean preProcessVertex(Vertex vertex) {
+        return true;
+    }
+
+    @Override
+    protected boolean processEdge(Vertex v, Vertex y) {
+        return true;
+    }
+
+    @Override
+    protected boolean postProcessVertex(Vertex vertex) {
+        return true;
     }
 }
