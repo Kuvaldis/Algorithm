@@ -31,16 +31,17 @@ public abstract class AbstractSearch<T> implements Search<T> {
             boolean interrupt = false;
             while (edgesIterator.hasNext()) {
                 final Vertex y = edgesIterator.next();
+                if (!y.isDiscovered()) {
+                    sequence.put(y);
+                    y.setDiscovered(true);
+                    y.setParent(v);
+                }
+
                 if (!y.isProcessed()) {
                     if (!processEdge(v, y)) {
                         interrupt = true;
                         break;
                     }
-                }
-                if (!y.isDiscovered()) {
-                    sequence.put(y);
-                    y.setDiscovered(true);
-                    y.setParent(v);
                 }
             }
             if (interrupt) {

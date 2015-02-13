@@ -1,6 +1,5 @@
 package kuvaldis.graph.application;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import kuvaldis.graph.Search;
 import kuvaldis.graph.bfs.AbstractBreadthFirstSearch;
 import kuvaldis.graph.domain.Graph;
