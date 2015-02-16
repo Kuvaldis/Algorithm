@@ -16,7 +16,7 @@ public abstract class AbstractBreadthFirstSearch<T> extends AbstractSearch<T> {
     }
 
     @Override
-    protected boolean sequenceContinue(Vertex v, Vertex y) {
+    protected final boolean sequenceContinue(Vertex v, Vertex y) {
         return false;
     }
 

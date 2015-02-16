@@ -16,7 +16,7 @@ public abstract class AbstractDepthFirstSearch<T> extends AbstractSearch<T> {
     }
 
     @Override
-    protected boolean sequenceContinue(Vertex v, Vertex y) {
+    protected final boolean sequenceContinue(Vertex v, Vertex y) {
         return y.isDiscovered() && v.equals(y.getParent());
     }
 
@@ -51,7 +51,7 @@ public abstract class AbstractDepthFirstSearch<T> extends AbstractSearch<T> {
     }
 
     @Override
-    protected Iterator<Vertex> edgesIterator(Vertex vertex) {
+    protected final Iterator<Vertex> edgesIterator(Vertex vertex) {
         if (!edgeIterators.containsKey(vertex)) {
             edgeIterators.put(vertex, vertex.edgesIterator());
         }
