@@ -7,13 +7,17 @@ import kuvaldis.graph.domain.Vertex;
 
 import java.util.ArrayDeque;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Queue;
 
 public abstract class AbstractBreadthFirstSearch<T> extends AbstractSearch<T> {
 
     public AbstractBreadthFirstSearch(Graph graph, Integer rootNumber) {
         super(graph, rootNumber);
+    }
+
+    @Override
+    protected boolean sequenceContinue(Vertex v, Vertex y) {
+        return false;
     }
 
     @Override
@@ -28,7 +32,12 @@ public abstract class AbstractBreadthFirstSearch<T> extends AbstractSearch<T> {
             }
 
             @Override
-            public Vertex get() {
+            public Vertex peekNext() {
+                return vertexQueue.peek();
+            }
+
+            @Override
+            public Vertex removeNext() {
                 return vertexQueue.poll();
             }
 

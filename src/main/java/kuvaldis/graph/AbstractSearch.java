@@ -22,13 +22,16 @@ public abstract class AbstractSearch<T> implements Search<T> {
         sequence.put(rootVertex);
         rootVertex.setDiscovered(true);
         while (!sequence.isEmpty()) {
-            final Vertex v = sequence.get();
-            if (!preProcessVertex(v)) {
-                break;
+            final Vertex v = sequence.peekNext();
+            if (!v.isProcessed()) {
+                if (!preProcessVertex(v)) {
+                    break;
+                }
             }
             v.setProcessed(true);
             final Iterator<Vertex> edgesIterator = edgesIterator(v);
             boolean interrupt = false;
+            boolean sequenceContinue = false;
             while (edgesIterator.hasNext()) {
                 final Vertex y = edgesIterator.next();
                 if (!y.isDiscovered()) {
@@ -43,6 +46,13 @@ public abstract class AbstractSearch<T> implements Search<T> {
                         break;
                     }
                 }
+                if (sequenceContinue(v, y)) {
+                    sequenceContinue = true;
+                    break;
+                }
+            }
+            if (sequenceContinue) {
+                continue;
             }
             if (interrupt) {
                 break;
@@ -50,9 +60,12 @@ public abstract class AbstractSearch<T> implements Search<T> {
             if (!postProcessVertex(v)) {
                 break;
             }
+            sequence.removeNext();
         }
         return this;
     }
+
+    protected abstract boolean sequenceContinue(Vertex v, Vertex y);
 
     protected abstract SearchSequence sequence();
 

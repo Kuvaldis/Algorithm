@@ -5,15 +5,19 @@ import kuvaldis.graph.SearchSequence;
 import kuvaldis.graph.domain.Graph;
 import kuvaldis.graph.domain.Vertex;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 public abstract class AbstractDepthFirstSearch<T> extends AbstractSearch<T> {
 
+    private final Map<Vertex, Iterator<Vertex>> edgeIterators = new HashMap<>();
+
     public AbstractDepthFirstSearch(Graph graph, Integer rootNumber) {
         super(graph, rootNumber);
+    }
+
+    @Override
+    protected boolean sequenceContinue(Vertex v, Vertex y) {
+        return y.isDiscovered() && v.equals(y.getParent());
     }
 
     @Override
@@ -28,8 +32,15 @@ public abstract class AbstractDepthFirstSearch<T> extends AbstractSearch<T> {
             }
 
             @Override
-            public Vertex get() {
-                return vertexStack.pop();
+            public Vertex peekNext() {
+                return vertexStack.peek();
+            }
+
+            @Override
+            public Vertex removeNext() {
+                Vertex first = vertexStack.pop();
+                edgeIterators.remove(first);
+                return first;
             }
 
             @Override
@@ -41,7 +52,10 @@ public abstract class AbstractDepthFirstSearch<T> extends AbstractSearch<T> {
 
     @Override
     protected Iterator<Vertex> edgesIterator(Vertex vertex) {
-        return vertex.edgesDescendingIterator();
+        if (!edgeIterators.containsKey(vertex)) {
+            edgeIterators.put(vertex, vertex.edgesIterator());
+        }
+        return edgeIterators.get(vertex);
     }
 
     @Override
@@ -50,7 +64,7 @@ public abstract class AbstractDepthFirstSearch<T> extends AbstractSearch<T> {
     }
 
     @Override
-    protected boolean processEdge(Vertex v, Vertex y) {
+    final protected boolean processEdge(Vertex v, Vertex y) {
         return true;
     }
 
