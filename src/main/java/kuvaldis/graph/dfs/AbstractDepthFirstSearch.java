@@ -11,6 +11,8 @@ public abstract class AbstractDepthFirstSearch<T> extends AbstractSearch<T> {
 
     private final Map<Vertex, Iterator<Vertex>> edgeIterators = new HashMap<>();
 
+    private final Set<Vertex> preProcessedVertices = new HashSet<>();
+
     public AbstractDepthFirstSearch(Graph graph, Integer rootNumber) {
         super(graph, rootNumber);
     }
@@ -59,12 +61,20 @@ public abstract class AbstractDepthFirstSearch<T> extends AbstractSearch<T> {
     }
 
     @Override
-    protected boolean preProcessVertex(Vertex vertex) {
+    protected final boolean preProcessVertex(Vertex vertex) {
+        if (!preProcessedVertices.contains(vertex)) {
+            preProcessedVertices.add(vertex);
+            return doPreProcessVertex(vertex);
+        }
+        return true;
+    }
+
+    protected boolean doPreProcessVertex(final Vertex vertex) {
         return true;
     }
 
     @Override
-    final protected boolean processEdge(Vertex v, Vertex y) {
+    protected boolean processEdge(Vertex v, Vertex y) {
         return true;
     }
 

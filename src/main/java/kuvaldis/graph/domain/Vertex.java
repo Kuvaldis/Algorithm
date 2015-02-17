@@ -25,8 +25,4 @@ public class Vertex {
     public Iterator<Vertex> edgesIterator() {
         return edges.iterator();
     }
-
-    public Iterator<Vertex> edgesDescendingIterator() {
-        return edges.descendingIterator();
-    }
 }
