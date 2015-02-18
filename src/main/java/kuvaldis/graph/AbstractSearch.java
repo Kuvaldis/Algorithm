@@ -37,12 +37,11 @@ public abstract class AbstractSearch<T> implements Search<T> {
                     y.setParent(v);
                 }
 
-                if (!y.isProcessed()) {
-                    if (!processEdge(v, y)) {
-                        interrupt = true;
-                        break;
-                    }
+                if (!processEdge(v, y)) {
+                    interrupt = true;
+                    break;
                 }
+                
                 if (sequenceContinue(v, y)) {
                     sequenceContinue = true;
                     break;

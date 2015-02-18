@@ -13,6 +13,9 @@ public abstract class AbstractDepthFirstSearch<T> extends AbstractSearch<T> {
 
     private final Set<Vertex> preProcessedVertices = new HashSet<>();
 
+    private final Map<Vertex, Integer> entryTime = new HashMap<>();
+    private int time;
+
     public AbstractDepthFirstSearch(Graph graph, Integer rootNumber) {
         super(graph, rootNumber);
     }
@@ -64,6 +67,7 @@ public abstract class AbstractDepthFirstSearch<T> extends AbstractSearch<T> {
     protected final boolean preProcessVertex(Vertex vertex) {
         if (!preProcessedVertices.contains(vertex)) {
             preProcessedVertices.add(vertex);
+            entryTime.put(vertex, ++time);
             return doPreProcessVertex(vertex);
         }
         return true;
@@ -81,5 +85,9 @@ public abstract class AbstractDepthFirstSearch<T> extends AbstractSearch<T> {
     @Override
     protected boolean postProcessVertex(Vertex vertex) {
         return true;
+    }
+
+    protected Integer entryTime(final Vertex vertex) {
+        return entryTime.get(vertex);
     }
 }
