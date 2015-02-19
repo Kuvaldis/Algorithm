@@ -4,7 +4,6 @@ import kuvaldis.graph.domain.Graph;
 import kuvaldis.graph.domain.Vertex;
 
 import java.util.Iterator;
-import java.util.Optional;
 
 public abstract class AbstractSearch<T> implements Search<T> {
 
