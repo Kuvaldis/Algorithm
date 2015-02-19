@@ -29,14 +29,14 @@ public class StronglyConnectedComponentsSearch extends AbstractDepthFirstSearch<
     protected boolean processEdge(Vertex v, Vertex y) {
         final EdgeClass edgeClass = edgeClassification(v, y);
         if (EdgeClass.BACK.equals(edgeClass)) {
-            if (entryTime(y) < entryTime(getLow(v))) {
-                low.put(v, y);
+            if (entryTime(getLow(y)) < entryTime(getLow(v))) {
+                low.put(v, getLow(y));
             }
         }
         if (EdgeClass.CROSS.equals(edgeClass)) {
             if (scc.get(y) == null) {
-                if (entryTime(y) < entryTime(getLow(v))) {
-                    low.put(v, y);
+                if (entryTime(getLow(y)) < entryTime(getLow(v))) {
+                    low.put(v, getLow(y));
                 }
             }
         }
