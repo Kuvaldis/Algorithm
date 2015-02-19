@@ -32,7 +32,7 @@ public class ArticulationVertexSearch extends AbstractDepthFirstSearch<Map<Artic
     protected boolean processEdge(Vertex v, Vertex y) {
         final EdgeClass edgeClass = edgeClassification(v, y);
         if (EdgeClass.TREE.equals(edgeClass)) {
-            treeOutDegree.put(v, Optional.ofNullable(treeOutDegree.get(v)).orElse(0) + 1);
+            treeOutDegree.put(v, treeOutDegree.getOrDefault(v, 0) + 1);
         }
         if (EdgeClass.BACK.equals(edgeClass)) {
             if (entryTime(y) < entryTime(reachableAncestor.get(v))) {
@@ -57,7 +57,7 @@ public class ArticulationVertexSearch extends AbstractDepthFirstSearch<Map<Artic
         if (reachableAncestor.get(vertex).equals(vertex)) {
             result.putIfAbsent(ArticulationVertexType.BRIDGE, new HashSet<>());
             result.get(ArticulationVertexType.BRIDGE).add(vertex.getParent());
-            if (Optional.ofNullable(treeOutDegree.get(vertex)).orElse(0) > 0) { // not tree leaf
+            if (treeOutDegree.getOrDefault(vertex, 0) > 0) { // not tree leaf
                 result.get(ArticulationVertexType.BRIDGE).add(vertex);
             }
         }
