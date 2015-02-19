@@ -9,7 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class BipartiteCheck implements Search<Boolean> {
+public class BipartiteCheck extends AbstractBreadthFirstSearch<Boolean> {
+
+    public BipartiteCheck(Graph graph) {
+        super(graph);
+    }
 
     private enum Color {
         BLACK {
@@ -26,52 +30,26 @@ public class BipartiteCheck implements Search<Boolean> {
         public abstract Color getInverted();
     }
 
-    private final Graph graph;
-    private Boolean result;
+    private Boolean result = Boolean.TRUE;
     private final Map<Vertex, Color> colors = new HashMap<>();
 
-    public BipartiteCheck(Graph graph) {
-        this.graph = graph;
+    @Override
+    protected boolean startSubSearch(Vertex rootVertex) {
+        colors.put(rootVertex, Color.WHITE);
+        return true;
     }
 
     @Override
-    public Search<Boolean> search() {
-        for (int i = 1; i <= graph.size(); i++) {
-            final Vertex vertex = graph.getVertex(i);
-            if (!colors.containsKey(vertex)) {
-                colors.put(vertex, Color.WHITE);
-                result = new BipartiteCheckBfs(graph, i).search().result();
-                if (!result) break;
-            }
+    protected boolean processEdge(Vertex v, Vertex y) {
+        if (Objects.equals(colors.get(v), colors.get(y))) {
+            return result = Boolean.FALSE;
         }
-        return this;
+        colors.put(y, colors.get(v).getInverted());
+        return true;
     }
 
     @Override
     public Boolean result() {
         return result;
-    }
-
-    private final class BipartiteCheckBfs extends AbstractBreadthFirstSearch<Boolean> {
-
-        private Boolean result = Boolean.TRUE;
-
-        public BipartiteCheckBfs(Graph graph, Integer rootNumber) {
-            super(graph, rootNumber);
-        }
-
-        @Override
-        protected boolean processEdge(Vertex v, Vertex y) {
-            if (Objects.equals(colors.get(v), colors.get(y))) {
-                return result = Boolean.FALSE;
-            }
-            colors.put(y, colors.get(v).getInverted());
-            return true;
-        }
-
-        @Override
-        public Boolean result() {
-            return result;
-        }
     }
 }

@@ -10,10 +10,6 @@ public class ArticulationVertexSearch extends AbstractDepthFirstSearch<Map<Artic
 
     private final HashMap<ArticulationVertexType, Set<Vertex>> result = new HashMap<>();
 
-    private enum EdgeClass {
-        TREE, BACK, FORWARD, CROSS
-    }
-
     public enum ArticulationVertexType {
         ROOT, PARENT, BRIDGE
     }
@@ -22,8 +18,8 @@ public class ArticulationVertexSearch extends AbstractDepthFirstSearch<Map<Artic
 
     private final Map<Vertex, Integer> treeOutDegree = new HashMap<>();
 
-    public ArticulationVertexSearch(Graph graph, Integer rootNumber) {
-        super(graph, rootNumber);
+    public ArticulationVertexSearch(Graph graph) {
+        super(graph);
     }
 
     @Override
@@ -74,13 +70,5 @@ public class ArticulationVertexSearch extends AbstractDepthFirstSearch<Map<Artic
     @Override
     public Map<ArticulationVertexType, Set<Vertex>> result() {
         return result;
-    }
-
-    private EdgeClass edgeClassification(final Vertex v, final Vertex y) {
-        if (v.equals(y.getParent())) return EdgeClass.TREE;
-        if (y.isDiscovered() && !y.isProcessed()) return EdgeClass.BACK;
-        if (y.isProcessed() && entryTime(y) > entryTime(v)) return EdgeClass.FORWARD;
-        if (y.isProcessed() && entryTime(y) < entryTime(v)) return EdgeClass.CROSS;
-        throw new IllegalStateException(String.format("Can't determine edge class (%s, %s)", v, y));
     }
 }

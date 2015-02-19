@@ -1,34 +1,32 @@
 package kuvaldis.graph.application;
 
-import kuvaldis.graph.Search;
-import kuvaldis.graph.bfs.SimpleBreadthFirstSearch;
+import kuvaldis.graph.bfs.AbstractBreadthFirstSearch;
 import kuvaldis.graph.domain.Graph;
 import kuvaldis.graph.domain.Vertex;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class ConnectedComponentsSearch implements Search<Map<Integer, List<Vertex>>> {
+public class ConnectedComponentsSearch extends AbstractBreadthFirstSearch<Map<Integer, List<Vertex>>> {
 
-    private final Graph graph;
     private final Map<Integer, List<Vertex>> result = new HashMap<>();
+    private int currentSubSearch;
 
     public ConnectedComponentsSearch(Graph graph) {
-        this.graph = graph;
+        super(graph);
     }
 
     @Override
-    public Search<Map<Integer, List<Vertex>>> search() {
-        int c = 1;
-        for (int i = 1; i <= graph.size(); i++) {
-            final Vertex vertex = graph.getVertex(i);
-            if (!vertex.isDiscovered()) {
-                result.put(c++, new SimpleBreadthFirstSearch(graph, i).search().result());
-            }
-        }
-        return this;
+    protected boolean preProcessVertex(Vertex vertex) {
+        List<Vertex> subSearchVertices = Optional.ofNullable(result.get(currentSubSearch)).orElse(new ArrayList<>());
+        subSearchVertices.add(vertex);
+        result.put(currentSubSearch, subSearchVertices);
+        return true;
+    }
+
+    @Override
+    protected boolean startSubSearch(Vertex rootVertex) {
+        currentSubSearch++;
+        return true;
     }
 
     @Override

@@ -16,14 +16,14 @@ public class LoopSearchTest {
     @Test
     public void testLoopSearch() throws Exception {
         final Graph graph = GraphUtils.fromResource("loop_graph.txt");
-        final List<Vertex> result = new LoopSearch(graph, 1).search().result();
+        final List<Vertex> result = new LoopSearch(graph).search().result();
         assertEquals(Arrays.asList(1, 2, 3, 4), result.stream().map(Vertex::getNumber).collect(Collectors.toList()));
     }
 
     @Test
     public void testNoLoopSearch() throws Exception {
         final Graph graph = GraphUtils.fromResource("no_loop_graph.txt");
-        final List<Vertex> result = new LoopSearch(graph, 1).search().result();
+        final List<Vertex> result = new LoopSearch(graph).search().result();
         assertNull(result);
     }
 }

@@ -4,30 +4,48 @@ import kuvaldis.graph.domain.Graph;
 import kuvaldis.graph.domain.Vertex;
 
 import java.util.Iterator;
+import java.util.Optional;
 
 public abstract class AbstractSearch<T> implements Search<T> {
 
-    protected final Integer rootNumber;
     protected final Graph graph;
+    protected final Integer startVertexNumber;
 
-    public AbstractSearch(Graph graph, Integer rootNumber) {
-        this.rootNumber = rootNumber;
+    public AbstractSearch(Graph graph) {
+        this(graph, 1);
+    }
+
+    public AbstractSearch(Graph graph, Integer startVertexNumber) {
         this.graph = graph;
+        this.startVertexNumber = startVertexNumber;
     }
 
     @Override
     public final Search<T> search() {
         final SearchSequence sequence = sequence();
-        final Vertex rootVertex = graph.getVertex(rootNumber);
+        for (int i = startVertexNumber; i <= graph.size(); i++) {
+            final Vertex rootVertex = graph.getVertex(i);
+            if (!rootVertex.isDiscovered()) {
+                if (!subSearch(sequence, rootVertex)) {
+                    break;
+                }
+            }
+        }
+        return this;
+    }
+
+    private boolean subSearch(SearchSequence sequence, Vertex rootVertex) {
+        if (!startSubSearch(rootVertex)) {
+            return false;
+        }
         sequence.put(rootVertex);
         rootVertex.setDiscovered(true);
         while (!sequence.isEmpty()) {
             final Vertex v = sequence.peekNext();
             if (!preProcessVertex(v)) {
-                break;
+                return false;
             }
             final Iterator<Vertex> edgesIterator = edgesIterator(v);
-            boolean interrupt = false;
             boolean sequenceContinue = false;
             while (edgesIterator.hasNext()) {
                 final Vertex y = edgesIterator.next();
@@ -38,10 +56,9 @@ public abstract class AbstractSearch<T> implements Search<T> {
                 }
 
                 if (!processEdge(v, y)) {
-                    interrupt = true;
-                    break;
+                    return false;
                 }
-                
+
                 if (sequenceContinue(v, y)) {
                     sequenceContinue = true;
                     break;
@@ -50,17 +67,16 @@ public abstract class AbstractSearch<T> implements Search<T> {
             if (sequenceContinue) {
                 continue;
             }
-            if (interrupt) {
-                break;
-            }
             v.setProcessed(true);
             if (!postProcessVertex(v)) {
-                break;
+                return false;
             }
             sequence.removeNext();
         }
-        return this;
+        return true;
     }
+
+    protected abstract boolean startSubSearch(Vertex rootVertex);
 
     protected abstract boolean sequenceContinue(Vertex v, Vertex y);
 

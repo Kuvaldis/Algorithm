@@ -1,6 +1,6 @@
 package kuvaldis.graph.application;
 
-import kuvaldis.graph.AbstractSearch;
+import kuvaldis.graph.GraphUtils;
 import kuvaldis.graph.dfs.AbstractDepthFirstSearch;
 import kuvaldis.graph.domain.Graph;
 import kuvaldis.graph.domain.Vertex;
@@ -12,14 +12,15 @@ public class LoopSearch extends AbstractDepthFirstSearch<List<Vertex>> {
 
     private List<Vertex> result;
 
-    public LoopSearch(Graph graph, Integer rootNumber) {
-        super(graph, rootNumber);
+    public LoopSearch(Graph graph) {
+        super(graph);
     }
 
     @Override
     protected boolean processEdge(Vertex v, Vertex y) {
         List<Vertex> result = null;
-        if (!Objects.equals(v, y.getParent())) {
+        if (EdgeClass.BACK.equals(edgeClassification(v, y))) {
+            GraphUtils.clean(graph);
             this.result = result = new ShortestPathSearch(graph, y.getNumber(), v.getNumber()).search().result();
         }
         return result == null;

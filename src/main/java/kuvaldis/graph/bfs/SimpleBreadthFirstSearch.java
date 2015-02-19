@@ -10,8 +10,8 @@ public class SimpleBreadthFirstSearch extends AbstractBreadthFirstSearch<List<Ve
 
     final List<Vertex> order = new ArrayList<>();
 
-    public SimpleBreadthFirstSearch(Graph graph, Integer rootNumber) {
-        super(graph, rootNumber);
+    public SimpleBreadthFirstSearch(Graph graph) {
+        super(graph);
     }
 
     @Override

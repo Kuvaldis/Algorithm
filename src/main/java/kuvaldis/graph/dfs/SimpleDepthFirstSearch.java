@@ -10,8 +10,8 @@ public class SimpleDepthFirstSearch extends AbstractDepthFirstSearch<List<Vertex
 
     final List<Vertex> order = new ArrayList<>();
 
-    public SimpleDepthFirstSearch(Graph graph, Integer rootNumber) {
-        super(graph, rootNumber);
+    public SimpleDepthFirstSearch(Graph graph) {
+        super(graph);
     }
 
     @Override

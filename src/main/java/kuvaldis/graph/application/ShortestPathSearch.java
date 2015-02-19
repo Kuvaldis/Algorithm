@@ -10,10 +10,14 @@ import java.util.List;
 public class ShortestPathSearch extends AbstractBreadthFirstSearch<List<Vertex>> {
 
     private final Integer to;
+    private final Integer from;
+
+    private boolean subSearchStarted;
 
     public ShortestPathSearch(Graph graph, Integer from, Integer to) {
         super(graph, from);
         this.to = to;
+        this.from = from;
     }
 
     @Override
@@ -25,6 +29,14 @@ public class ShortestPathSearch extends AbstractBreadthFirstSearch<List<Vertex>>
             vertex = vertex.getParent();
             result.push(vertex);
         }
+        if (!from.equals(vertex.getNumber())){
+            return null;
+        }
         return result;
+    }
+
+    @Override
+    protected boolean startSubSearch(Vertex rootVertex) {
+        return subSearchStarted = !subSearchStarted;
     }
 }

@@ -42,4 +42,13 @@ public final class GraphUtils {
         }
         return vertex;
     }
+
+    public static void clean(final Graph graph) {
+        for (int i = 1; i <= graph.size(); i++) {
+            final Vertex vertex = graph.getVertex(i);
+            vertex.setDiscovered(false);
+            vertex.setProcessed(false);
+            vertex.setParent(null);
+        }
+    }
 }

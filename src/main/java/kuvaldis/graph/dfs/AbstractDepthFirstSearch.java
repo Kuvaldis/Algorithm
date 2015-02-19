@@ -16,8 +16,16 @@ public abstract class AbstractDepthFirstSearch<T> extends AbstractSearch<T> {
     private final Map<Vertex, Integer> entryTime = new HashMap<>();
     private int time;
 
-    public AbstractDepthFirstSearch(Graph graph, Integer rootNumber) {
-        super(graph, rootNumber);
+    protected enum EdgeClass {
+        TREE, BACK, FORWARD, CROSS
+    }
+
+    public AbstractDepthFirstSearch(Graph graph) {
+        super(graph);
+    }
+
+    public AbstractDepthFirstSearch(Graph graph, Integer startVertexNumber) {
+        super(graph, startVertexNumber);
     }
 
     @Override
@@ -87,7 +95,20 @@ public abstract class AbstractDepthFirstSearch<T> extends AbstractSearch<T> {
         return true;
     }
 
-    protected Integer entryTime(final Vertex vertex) {
+    protected final Integer entryTime(final Vertex vertex) {
         return entryTime.get(vertex);
+    }
+
+    protected final EdgeClass edgeClassification(final Vertex v, final Vertex y) {
+        if (v.equals(y.getParent())) return EdgeClass.TREE;
+        if (y.isDiscovered() && !y.isProcessed()) return EdgeClass.BACK;
+        if (y.isProcessed() && entryTime(y) > entryTime(v)) return EdgeClass.FORWARD;
+        if (y.isProcessed() && entryTime(y) < entryTime(v)) return EdgeClass.CROSS;
+        throw new IllegalStateException(String.format("Can't determine edge class (%s, %s)", v, y));
+    }
+
+    @Override
+    protected boolean startSubSearch(Vertex rootVertex) {
+        return true;
     }
 }

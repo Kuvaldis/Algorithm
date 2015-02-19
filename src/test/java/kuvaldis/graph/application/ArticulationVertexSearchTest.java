@@ -15,13 +15,13 @@ public class ArticulationVertexSearchTest {
     public void testArticulationVertexSearch() throws Exception {
         Graph graph = GraphUtils.fromResource("articulation_vertex_graph_1.txt");
         Map<ArticulationVertexSearch.ArticulationVertexType, Set<Vertex>> result =
-                new ArticulationVertexSearch(graph, 1).search().result();
+                new ArticulationVertexSearch(graph).search().result();
         assertEquals(Arrays.asList(1), getNumbers(result, ArticulationVertexSearch.ArticulationVertexType.ROOT));
         assertEquals(Arrays.asList(2), getNumbers(result, ArticulationVertexSearch.ArticulationVertexType.PARENT));
         assertEquals(Arrays.asList(1, 2), getNumbers(result, ArticulationVertexSearch.ArticulationVertexType.BRIDGE));
 
         graph = GraphUtils.fromResource("articulation_vertex_graph_2.txt");
-        result = new ArticulationVertexSearch(graph, 1).search().result();
+        result = new ArticulationVertexSearch(graph).search().result();
         assertEquals(Arrays.asList(1), getNumbers(result, ArticulationVertexSearch.ArticulationVertexType.ROOT));
         assertEquals(Arrays.asList(4, 8), getNumbers(result, ArticulationVertexSearch.ArticulationVertexType.PARENT));
         assertEquals(Arrays.asList(3, 4), getNumbers(result, ArticulationVertexSearch.ArticulationVertexType.BRIDGE));
