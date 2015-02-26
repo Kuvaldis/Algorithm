@@ -1,5 +1,6 @@
 package kuvaldis.algorithm.graph.weighted;
 
+import kuvaldis.algorithm.graph.weighted.domain.WeightedEdge;
 import kuvaldis.algorithm.graph.weighted.domain.WeightedGraph;
 import kuvaldis.algorithm.graph.weighted.domain.WeightedVertex;
 import org.junit.Assert;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static org.junit.Assert.*;
@@ -19,44 +21,60 @@ public class WeightedGraphUtilsTest {
 
     @Test
     public void testWeightedFromResource() throws IOException {
-        final WeightedGraph graph = WeightedGraphUtils.fromSource("weighted_graph.txt");
+        final WeightedGraph graph = WeightedGraphUtils.fromSource("graph.txt");
 
         Assert.assertEquals(6, graph.size());
 
         WeightedVertex vertex = graph.getVertex(1);
         assertNotNull(vertex);
         assertEquals(1, vertex.getNumber());
-        assertEquals(Arrays.asList(2, 5, 6), edgeNumbers(vertex));
+        assertEquals(Arrays.asList(2, 5, 6), edgeHeadNumbers(vertex));
+        assertEquals(Arrays.asList(1, 2, 1), edgeWeights(vertex));
 
         vertex = graph.getVertex(2);
         assertNotNull(vertex);
         assertEquals(2, vertex.getNumber());
-        assertEquals(Arrays.asList(1, 3, 5), edgeNumbers(vertex));
+        assertEquals(Arrays.asList(1, 3, 5), edgeHeadNumbers(vertex));
+        assertEquals(Arrays.asList(4, 3, 42), edgeWeights(vertex));
 
         vertex = graph.getVertex(3);
         assertNotNull(vertex);
         assertEquals(3, vertex.getNumber());
-        assertEquals(Arrays.asList(2, 4), edgeNumbers(vertex));
+        assertEquals(Arrays.asList(2, 4), edgeHeadNumbers(vertex));
+        assertEquals(Arrays.asList(1, 3), edgeWeights(vertex));
 
         vertex = graph.getVertex(4);
         assertNotNull(vertex);
         assertEquals(4, vertex.getNumber());
-        assertEquals(Arrays.asList(3, 5), edgeNumbers(vertex));
+        assertEquals(Arrays.asList(3, 5), edgeHeadNumbers(vertex));
+        assertEquals(Arrays.asList(9, 16), edgeWeights(vertex));
 
         vertex = graph.getVertex(5);
         assertNotNull(vertex);
         assertEquals(5, vertex.getNumber());
-        assertEquals(Arrays.asList(1, 2, 4), edgeNumbers(vertex));
+        assertEquals(Arrays.asList(1, 2, 4), edgeHeadNumbers(vertex));
+        assertEquals(Arrays.asList(12, 5, 8), edgeWeights(vertex));
 
         vertex = graph.getVertex(6);
         assertNotNull(vertex);
         assertEquals(6, vertex.getNumber());
-        assertEquals(Arrays.asList(1), edgeNumbers(vertex));
+        assertEquals(Arrays.asList(1), edgeHeadNumbers(vertex));
+        assertEquals(Arrays.asList(7), edgeWeights(vertex));
     }
 
-    private List<Integer> edgeNumbers(WeightedVertex vertex) {
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(vertex.edgesIterator(), Spliterator.ORDERED), false)
+    private List<Integer> edgeHeadNumbers(WeightedVertex vertex) {
+        return edgesStream(vertex)
                 .map(edge -> edge.getVertex().getNumber())
                 .collect(Collectors.toList());
+    }
+
+    private List<Integer> edgeWeights(WeightedVertex vertex) {
+        return edgesStream(vertex)
+                .map(WeightedEdge::getWeight)
+                .collect(Collectors.toList());
+    }
+
+    private Stream<WeightedEdge> edgesStream(WeightedVertex vertex) {
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(vertex.edgesIterator(), Spliterator.ORDERED), false);
     }
 }
