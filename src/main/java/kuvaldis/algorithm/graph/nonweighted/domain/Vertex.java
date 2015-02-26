@@ -1,4 +1,4 @@
-package kuvaldis.algorithm.graph.domain;
+package kuvaldis.algorithm.graph.nonweighted.domain;
 
 import lombok.*;
 
