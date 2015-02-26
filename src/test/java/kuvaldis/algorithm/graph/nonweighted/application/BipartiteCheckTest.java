@@ -1,7 +1,7 @@
 package kuvaldis.algorithm.graph.nonweighted.application;
 
-import kuvaldis.algorithm.graph.nonweighted.GraphUtils;
-import kuvaldis.algorithm.graph.nonweighted.domain.Graph;
+import kuvaldis.algorithm.graph.GraphUtils;
+import kuvaldis.algorithm.graph.domain.Graph;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

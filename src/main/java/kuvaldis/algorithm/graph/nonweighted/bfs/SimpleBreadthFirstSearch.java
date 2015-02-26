@@ -1,7 +1,7 @@
 package kuvaldis.algorithm.graph.nonweighted.bfs;
 
-import kuvaldis.algorithm.graph.nonweighted.domain.Graph;
-import kuvaldis.algorithm.graph.nonweighted.domain.Vertex;
+import kuvaldis.algorithm.graph.domain.Graph;
+import kuvaldis.algorithm.graph.domain.Vertex;
 
 import java.util.ArrayList;
 import java.util.List;

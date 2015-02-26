@@ -1,8 +1,8 @@
 package kuvaldis.algorithm.graph.nonweighted.application;
 
 import kuvaldis.algorithm.graph.nonweighted.bfs.AbstractBreadthFirstSearch;
-import kuvaldis.algorithm.graph.nonweighted.domain.Graph;
-import kuvaldis.algorithm.graph.nonweighted.domain.Vertex;
+import kuvaldis.algorithm.graph.domain.Graph;
+import kuvaldis.algorithm.graph.domain.Vertex;
 
 import java.util.LinkedList;
 import java.util.List;

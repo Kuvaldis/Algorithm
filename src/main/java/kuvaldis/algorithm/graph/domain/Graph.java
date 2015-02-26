@@ -1,4 +1,4 @@
-package kuvaldis.algorithm.graph.nonweighted.domain;
+package kuvaldis.algorithm.graph.domain;
 
 import java.util.HashMap;
 import java.util.Map;

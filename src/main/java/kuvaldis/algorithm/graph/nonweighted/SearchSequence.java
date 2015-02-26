@@ -1,6 +1,6 @@
 package kuvaldis.algorithm.graph.nonweighted;
 
-import kuvaldis.algorithm.graph.nonweighted.domain.Vertex;
+import kuvaldis.algorithm.graph.domain.Vertex;
 
 public interface SearchSequence {
     void put(Vertex vertex);

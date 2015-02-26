@@ -2,8 +2,8 @@ package kuvaldis.algorithm.graph.nonweighted.dfs;
 
 import kuvaldis.algorithm.graph.nonweighted.AbstractSearch;
 import kuvaldis.algorithm.graph.nonweighted.SearchSequence;
-import kuvaldis.algorithm.graph.nonweighted.domain.Graph;
-import kuvaldis.algorithm.graph.nonweighted.domain.Vertex;
+import kuvaldis.algorithm.graph.domain.Graph;
+import kuvaldis.algorithm.graph.domain.Vertex;
 
 import java.util.*;
 
