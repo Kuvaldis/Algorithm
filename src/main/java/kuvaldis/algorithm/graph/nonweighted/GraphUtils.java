@@ -1,7 +1,10 @@
-package kuvaldis.algorithm.graph;
+package kuvaldis.algorithm.graph.nonweighted;
 
 import kuvaldis.algorithm.graph.nonweighted.domain.Graph;
 import kuvaldis.algorithm.graph.nonweighted.domain.Vertex;
+import kuvaldis.algorithm.graph.weighted.domain.WeightedEdge;
+import kuvaldis.algorithm.graph.weighted.domain.WeightedGraph;
+import kuvaldis.algorithm.graph.weighted.domain.WeightedVertex;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,17 +27,16 @@ public final class GraphUtils {
         return graph;
     }
 
-    private static Vertex processParts(Graph graph, String[] parts) {
+    private static void processParts(Graph graph, String[] parts) {
         final Integer number = Integer.valueOf(parts[0]);
-        Vertex vertex = processNumber(graph, number);
+        Vertex vertex = processVertexNumber(graph, number);
         for (int i = 1; i < parts.length; i++) {
             final Integer edgeToNumber = Integer.valueOf(parts[i]);
-            vertex.addEdge(processNumber(graph, edgeToNumber));
+            vertex.addEdge(processVertexNumber(graph, edgeToNumber));
         }
-        return vertex;
     }
 
-    private static Vertex processNumber(Graph graph, Integer number) {
+    private static Vertex processVertexNumber(Graph graph, Integer number) {
         Vertex vertex = graph.getVertex(number);
         if (vertex == null) {
             vertex = new Vertex(number);

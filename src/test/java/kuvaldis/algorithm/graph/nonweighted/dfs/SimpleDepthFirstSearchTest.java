@@ -1,6 +1,6 @@
 package kuvaldis.algorithm.graph.nonweighted.dfs;
 
-import kuvaldis.algorithm.graph.GraphUtils;
+import kuvaldis.algorithm.graph.nonweighted.GraphUtils;
 import kuvaldis.algorithm.graph.nonweighted.domain.Graph;
 import kuvaldis.algorithm.graph.nonweighted.domain.Vertex;
 import org.junit.Test;

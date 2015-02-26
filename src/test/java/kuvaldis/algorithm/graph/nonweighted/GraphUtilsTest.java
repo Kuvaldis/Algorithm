@@ -1,7 +1,9 @@
-package kuvaldis.algorithm.graph;
+package kuvaldis.algorithm.graph.nonweighted;
 
+import kuvaldis.algorithm.graph.nonweighted.GraphUtils;
 import kuvaldis.algorithm.graph.nonweighted.domain.Graph;
 import kuvaldis.algorithm.graph.nonweighted.domain.Vertex;
+import kuvaldis.algorithm.graph.weighted.domain.WeightedGraph;
 import org.junit.Assert;
 import org.junit.Test;
 
