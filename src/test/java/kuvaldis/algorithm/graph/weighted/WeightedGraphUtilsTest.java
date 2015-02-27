@@ -21,7 +21,7 @@ public class WeightedGraphUtilsTest {
 
     @Test
     public void testWeightedFromResource() throws IOException {
-        final WeightedGraph graph = WeightedGraphUtils.fromSource("graph.txt");
+        final WeightedGraph graph = WeightedGraphUtils.fromSource("graph.txt", false);
 
         Assert.assertEquals(6, graph.size());
 
@@ -35,36 +35,36 @@ public class WeightedGraphUtilsTest {
         assertNotNull(vertex);
         assertEquals(2, vertex.getNumber());
         assertEquals(Arrays.asList(1, 3, 5), edgeHeadNumbers(vertex));
-        assertEquals(Arrays.asList(4, 3, 42), edgeWeights(vertex));
+        assertEquals(Arrays.asList(1, 3, 42), edgeWeights(vertex));
 
         vertex = graph.getVertex(3);
         assertNotNull(vertex);
         assertEquals(3, vertex.getNumber());
         assertEquals(Arrays.asList(2, 4), edgeHeadNumbers(vertex));
-        assertEquals(Arrays.asList(1, 3), edgeWeights(vertex));
+        assertEquals(Arrays.asList(3, 3), edgeWeights(vertex));
 
         vertex = graph.getVertex(4);
         assertNotNull(vertex);
         assertEquals(4, vertex.getNumber());
         assertEquals(Arrays.asList(3, 5), edgeHeadNumbers(vertex));
-        assertEquals(Arrays.asList(9, 16), edgeWeights(vertex));
+        assertEquals(Arrays.asList(3, 16), edgeWeights(vertex));
 
         vertex = graph.getVertex(5);
         assertNotNull(vertex);
         assertEquals(5, vertex.getNumber());
         assertEquals(Arrays.asList(1, 2, 4), edgeHeadNumbers(vertex));
-        assertEquals(Arrays.asList(12, 5, 8), edgeWeights(vertex));
+        assertEquals(Arrays.asList(2, 42, 16), edgeWeights(vertex));
 
         vertex = graph.getVertex(6);
         assertNotNull(vertex);
         assertEquals(6, vertex.getNumber());
         assertEquals(Arrays.asList(1), edgeHeadNumbers(vertex));
-        assertEquals(Arrays.asList(7), edgeWeights(vertex));
+        assertEquals(Arrays.asList(1), edgeWeights(vertex));
     }
 
     private List<Integer> edgeHeadNumbers(WeightedVertex vertex) {
         return edgesStream(vertex)
-                .map(edge -> edge.getVertex().getNumber())
+                .map(edge -> edge.getHeadVertex().getNumber())
                 .collect(Collectors.toList());
     }
 

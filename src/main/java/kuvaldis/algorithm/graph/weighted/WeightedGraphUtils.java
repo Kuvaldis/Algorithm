@@ -15,8 +15,8 @@ public final class WeightedGraphUtils {
     private WeightedGraphUtils() {
     }
 
-    public static WeightedGraph fromSource(final String name) throws IOException {
-        final WeightedGraph graph = new WeightedGraph();
+    public static WeightedGraph fromSource(final String name, boolean directed) throws IOException {
+        final WeightedGraph graph = new WeightedGraph(directed);
         try (BufferedReader reader =
                      new BufferedReader(new InputStreamReader(WeightedGraphUtils.class.getResourceAsStream(name)))) {
             String read;
@@ -36,7 +36,7 @@ public final class WeightedGraphUtils {
             final Integer edgeHeadVertexNumber = Integer.valueOf(vertexAndEdge[0].trim());
             final Integer edgeWeight = Integer.valueOf(vertexAndEdge[1].trim());
             final WeightedVertex edgeHeadVertex = processVertexNumber(graph, edgeHeadVertexNumber);
-            vertex.addEdge(new WeightedEdge(edgeHeadVertex, edgeWeight));
+            vertex.addEdge(new WeightedEdge(vertex, edgeHeadVertex, edgeWeight));
         }
     }
 
