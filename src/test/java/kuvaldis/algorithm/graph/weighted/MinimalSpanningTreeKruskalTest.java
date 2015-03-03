@@ -6,15 +6,16 @@ import kuvaldis.algorithm.graph.weighted.domain.WeightedVertex;
 import org.junit.Test;
 
 import java.util.Set;
+import java.util.regex.Matcher;
 
 import static org.junit.Assert.*;
 
-public class MinimalSpanningTreePrimTest extends SpanningTreeTest {
+public class MinimalSpanningTreeKruskalTest extends SpanningTreeTest {
 
     @Test
     public void testBuild() throws Exception {
         final WeightedGraph graph = WeightedGraphUtils.fromSource("graph.txt", false);
-        final Set<WeightedEdge> edges = new MinimalSpanningTreePrim(graph).build();
+        final Set<WeightedEdge> edges = new MinimalSpanningTreeKruskal(graph).build();
         assertNotNull(edges);
         assertEquals(graph.size() - 1, edges.size());
         assertTrue(contains(edges, 1, 2, 1));
