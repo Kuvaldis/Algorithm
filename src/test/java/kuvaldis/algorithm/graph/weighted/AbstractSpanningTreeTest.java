@@ -5,7 +5,7 @@ import kuvaldis.algorithm.graph.weighted.domain.WeightedVertex;
 
 import java.util.Set;
 
-public class SpanningTreeTest {
+public abstract class AbstractSpanningTreeTest {
 
     protected boolean contains(final Set<WeightedEdge> edges,
                              final Integer vertexNumber1,

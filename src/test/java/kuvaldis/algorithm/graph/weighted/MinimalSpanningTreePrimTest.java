@@ -2,14 +2,13 @@ package kuvaldis.algorithm.graph.weighted;
 
 import kuvaldis.algorithm.graph.weighted.domain.WeightedEdge;
 import kuvaldis.algorithm.graph.weighted.domain.WeightedGraph;
-import kuvaldis.algorithm.graph.weighted.domain.WeightedVertex;
 import org.junit.Test;
 
 import java.util.Set;
 
 import static org.junit.Assert.*;
 
-public class MinimalSpanningTreePrimTest extends SpanningTreeTest {
+public class MinimalSpanningTreePrimTest extends AbstractSpanningTreeTest {
 
     @Test
     public void testBuild() throws Exception {

@@ -8,7 +8,7 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
-public class MinimalSpanningTreeKruskalTest extends SpanningTreeTest {
+public class MinimalSpanningTreeKruskalTest extends AbstractSpanningTreeTest {
 
     @Test
     public void testBuild() throws Exception {
