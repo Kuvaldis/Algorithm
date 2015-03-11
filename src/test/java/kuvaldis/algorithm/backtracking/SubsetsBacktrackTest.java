@@ -6,7 +6,8 @@ import java.util.Set;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toSet;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class SubsetsBacktrackTest {
 
@@ -25,6 +26,7 @@ public class SubsetsBacktrackTest {
         assertTrue(outputSets.contains(set(92, 2121)));
         assertTrue(outputSets.contains(set(4, 92, 2121)));
     }
+
     private static final Set<Integer> set(final Integer... elements) {
         return asList(elements).stream().collect(toSet());
     }

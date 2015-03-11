@@ -20,20 +20,20 @@ public abstract class AbstractBacktrack<E, R, D> implements Backtrack<R, D> {
     protected void prepare(D input) { }
 
     protected boolean doBacktrack(final List<E> solutionsList, final int start, final D input) {
-        int solutionLength = start;
-        if (isSolution(solutionsList, solutionLength, input)) {
-            processSolution(solutionsList, solutionLength, input);
+        int nextSolutionSize = start;
+        if (isSolution(solutionsList, nextSolutionSize, input)) {
+            processSolution(solutionsList, nextSolutionSize, input);
         } else {
-            final List<E> candidates = constructCandidates(solutionsList, ++solutionLength, input);
+            final List<E> candidates = constructCandidates(solutionsList, ++nextSolutionSize - 1, input);
             for (E candidate : candidates) {
-                addToSolutionsList(solutionsList, solutionLength - 1, candidate);
-                if (makeMove(solutionsList, solutionLength, input)) {
+                addToSolutionsList(solutionsList, nextSolutionSize - 1, candidate);
+                if (makeMove(solutionsList, nextSolutionSize, input)) {
                     return true;
                 }
-                if (doBacktrack(solutionsList, solutionLength, input)) {
+                if (doBacktrack(solutionsList, nextSolutionSize, input)) {
                     return true;
                 }
-                if (unmakeMove(solutionsList, solutionLength, input)) {
+                if (unmakeMove(solutionsList, nextSolutionSize, input)) {
                     return true;
                 }
             }
@@ -49,19 +49,19 @@ public abstract class AbstractBacktrack<E, R, D> implements Backtrack<R, D> {
         }
     }
 
-    protected boolean makeMove(List<E> solutionsList, int k, D input) {
+    protected boolean makeMove(List<E> solutionsList, int solutionsSize, D input) {
         return false;
     }
 
-    protected boolean unmakeMove(List<E> solutionsList, int k, D input) {
+    protected boolean unmakeMove(List<E> solutionsList, int solutionsSize, D input) {
         return false;
     }
 
     protected abstract R constructResult(D input);
 
-    protected abstract boolean isSolution(List<E> solutionsList, int k, D input);
+    protected abstract boolean isSolution(List<E> solutionsList, int solutionsSize, D input);
 
-    protected abstract void processSolution(List<E> solutionsList, int k, D input);
+    protected abstract void processSolution(List<E> solutionsList, int solutionsSize, D input);
 
-    protected abstract List<E> constructCandidates(List<E> solutionsList, int k, D input);
+    protected abstract List<E> constructCandidates(List<E> solutionsList, int solutionsSize, D input);
 }
