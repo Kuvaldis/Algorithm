@@ -12,7 +12,7 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
-public class AllSubsetsBacktrack<E> extends AbstractBacktrack<Boolean, Set<Set<E>>, Set<E>> {
+public class SubsetsBacktrack<E> extends AbstractBacktrack<Boolean, Set<Set<E>>, Set<E>> {
 
     private Set<Set<E>> result = new HashSet<>();
     private List<E> orderedSetList = emptyList();

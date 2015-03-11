@@ -8,11 +8,11 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.*;
 
-public class AllSubsetsBacktrackTest {
+public class SubsetsBacktrackTest {
 
     @Test
     public void testBacktrack() throws Exception {
-        final AllSubsetsBacktrack<Integer> backtrack = new AllSubsetsBacktrack<>();
+        final SubsetsBacktrack<Integer> backtrack = new SubsetsBacktrack<>();
         final Set<Integer> inputSet = set(4, 92, 2121);
         final Set<Set<Integer>> outputSets = backtrack.generate(inputSet);
         assertEquals(8, outputSets.size());
