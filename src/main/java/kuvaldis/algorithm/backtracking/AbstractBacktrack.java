@@ -10,7 +10,7 @@ import java.util.List;
 public abstract class AbstractBacktrack<E, R, D> implements Backtrack<R, D> {
 
     @Override
-    public R backtrack(D input) {
+    public R generate(D input) {
         prepare(input);
         final List<E> solutionsList = new ArrayList<>();
         doBacktrack(solutionsList, 0, input);
