@@ -13,13 +13,13 @@ public abstract class AbstractBacktrack<E, R, D> implements Backtrack<R, D> {
     public R generate(D input) {
         prepare(input);
         final List<E> solutionsList = new ArrayList<>();
-        doBacktrack(solutionsList, 0, input);
+        backtrack(solutionsList, 0, input);
         return constructResult(input);
     }
 
     protected void prepare(D input) { }
 
-    protected boolean doBacktrack(final List<E> solutionsList, final int start, final D input) {
+    protected boolean backtrack(final List<E> solutionsList, final int start, final D input) {
         int nextSolutionSize = start;
         if (isSolution(solutionsList, nextSolutionSize, input)) {
             processSolution(solutionsList, nextSolutionSize, input);
@@ -30,7 +30,7 @@ public abstract class AbstractBacktrack<E, R, D> implements Backtrack<R, D> {
                 if (makeMove(solutionsList, nextSolutionSize, input)) {
                     return true;
                 }
-                if (doBacktrack(solutionsList, nextSolutionSize, input)) {
+                if (backtrack(solutionsList, nextSolutionSize, input)) {
                     return true;
                 }
                 if (unmakeMove(solutionsList, nextSolutionSize, input)) {
