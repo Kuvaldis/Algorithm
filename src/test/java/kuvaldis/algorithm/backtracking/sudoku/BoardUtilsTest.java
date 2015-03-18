@@ -5,13 +5,13 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class SudokuUtilsTest {
+public class BoardUtilsTest {
 
-    private Sudoku sudoku;
+    private Board board;
 
     @Before
     public void setUp() throws Exception {
-        sudoku = SudokuUtils.fromResource("sudoku.txt");
+        board = BoardUtils.fromResource("sudoku.txt");
     }
 
     @Test
@@ -107,11 +107,30 @@ public class SudokuUtilsTest {
         assertEquals(null, s(8, 8));
     }
 
+    @Test
+    public void testUnfilled() throws Exception {
+        assertEquals(45, board.getUnfilled());
+        board.setCellValue(0, 0, 1);
+        assertEquals(44, board.getUnfilled());
+        board.setCellValue(0, 0, null);
+        assertEquals(45, board.getUnfilled());
+        board.setCellValue(0, 0, 1);
+        assertEquals(44, board.getUnfilled());
+        board.setCellValue(0, 0, null);
+        assertEquals(45, board.getUnfilled());
+        board.setCellValue(1, 0, null);
+        assertEquals(45, board.getUnfilled());
+        board.setCellValue(2, 0, 1);
+        assertEquals(44, board.getUnfilled());
+        board.setCellValue(0, 1, null);
+        assertEquals(45, board.getUnfilled());
+    }
+
     private Integer i(int i) {
         return i;
     }
 
     private Integer s(final int x, final int y) {
-        return sudoku.getCellValue(x, y);
+        return board.getCellValue(x, y);
     }
 }
