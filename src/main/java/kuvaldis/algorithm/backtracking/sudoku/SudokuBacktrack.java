@@ -29,10 +29,10 @@ public class SudokuBacktrack extends AbstractBacktrack<SudokuBacktrack.CellValue
 
     private Map<Cell, Set<Integer>> possibleValues = new HashMap<>();
 
-    private final Map<Cell, Map<Cell, Set<Integer>>> disabledValues = new HashMap<>();
+    private final Map<Cell, Map<Cell, Integer>> disabledValues = new HashMap<>();
 
     @Override
-    protected void prepare(Board board) {
+    protected void prepare(final Board board) {
         possibleValues = board.getEmptyCells().stream()
                 .collect(toMap(Function.<Cell>identity(), (Cell cell) -> {
                     final Set<Integer> impossibleValues = relatedCells(cell).stream()
@@ -46,29 +46,26 @@ public class SudokuBacktrack extends AbstractBacktrack<SudokuBacktrack.CellValue
     }
 
     @Override
-    protected Board constructResult(Board input) {
+    protected Board constructResult(final Board input) {
         return input;
     }
 
     @Override
-    protected boolean isSolution(List<CellValue> solutionsList, int solutionsSize, Board input) {
+    protected boolean isSolution(final List<CellValue> solutionsList, final int solutionsSize, final Board input) {
         return input.getEmptyCells().size() == 0;
     }
 
     @Override
-    protected boolean processSolution(List<CellValue> solutionsList, int solutionsSize, Board input) {
+    protected boolean processSolution(final List<CellValue> solutionsList, final int solutionsSize, final Board input) {
         return true;
     }
 
     @Override
-    protected List<CellValue> constructCandidates(List<CellValue> solutionsList, int solutionsSize, Board input) {
-        System.out.println(input);
-        System.out.println();
+    protected List<CellValue> constructCandidates(final List<CellValue> solutionsList, final int solutionsSize, final Board input) {
         List<CellValue> result = possibleValues.entrySet().stream()
                 .filter(entry -> input.getCellValue(entry.getKey()) == null)
                 .map(entry -> entry.getValue().stream()
-                        .filter(value -> !cellDisables(entry.getKey()).values().stream()
-                                .flatMap(Collection::stream)
+                        .filter(value -> !cellDisabledValues(entry.getKey()).values().stream()
                                 .filter(value::equals)
                                 .findAny()
                                 .isPresent())
@@ -86,14 +83,14 @@ public class SudokuBacktrack extends AbstractBacktrack<SudokuBacktrack.CellValue
     }
 
     @Override
-    protected boolean makeMove(List<CellValue> solutionsList, int solutionsSize, Board input) {
+    protected boolean makeMove(final List<CellValue> solutionsList, final int solutionsSize, final Board input) {
         final CellValue cellValue = solutionsList.get(solutionsSize - 1);
         fillCell(input, cellValue);
         return false;
     }
 
     @Override
-    protected boolean unmakeMove(List<CellValue> solutionsList, int solutionsSize, Board input) {
+    protected boolean unmakeMove(final List<CellValue> solutionsList, final int solutionsSize, final Board input) {
         freeCell(input, solutionsList.get(solutionsSize - 1));
         return false;
     }
@@ -105,12 +102,12 @@ public class SudokuBacktrack extends AbstractBacktrack<SudokuBacktrack.CellValue
         disableValue(cell, cell, value);
         relatedCells(cell).stream()
                 .filter(relatedCell -> board.getCellValue(relatedCell) == null)
-                .filter(relatedCell -> isPossibleValue(value, relatedCell))
+                .filter(relatedCell -> isPossibleValue(relatedCell, value))
                 .filter(relatedCell -> !isValueDisabled(relatedCell, cell, value))
                 .forEach(relatedCellToDisableValue -> disableValue(relatedCellToDisableValue, cell, value));
     }
 
-    private Boolean isPossibleValue(Integer value, Cell cell) {
+    private Boolean isPossibleValue(final Cell cell, final Integer value) {
         return ofNullable(possibleValues.get(cell))
                 .map(relatedCellPossibleValues -> relatedCellPossibleValues.contains(value))
                 .orElse(Boolean.FALSE);
@@ -119,45 +116,35 @@ public class SudokuBacktrack extends AbstractBacktrack<SudokuBacktrack.CellValue
     private Boolean isValueDisabled(final Cell cell, final Cell forCell, final Integer value) {
         return ofNullable(disabledValues.get(cell))
                 .map(relatedCellDisables -> relatedCellDisables.get(forCell))
-                .map(values -> values.contains(value))
+                .map(value::equals)
                 .orElse(Boolean.FALSE);
     }
 
     private void disableValue(final Cell cell, final Cell forCell, final Integer value) {
-        cellDisabledValues(cell, forCell).add(value);
+        cellDisabledValues(cell).put(forCell, value);
     }
 
-    private Set<Integer> cellDisabledValues(Cell cell, Cell forCell) {
-        Map<Cell, Set<Integer>> cellDisables = cellDisables(cell);
-        Set<Integer> cellDisabledValues = cellDisables.get(forCell);
+    private Map<Cell, Integer> cellDisabledValues(final Cell cell) {
+        Map<Cell, Integer> cellDisabledValues = disabledValues.get(cell);
         if (cellDisabledValues == null) {
-            cellDisabledValues = new HashSet<>();
-            cellDisables.put(forCell, cellDisabledValues);
+            cellDisabledValues = new HashMap<>();
+            disabledValues.put(cell, cellDisabledValues);
         }
         return cellDisabledValues;
-    }
-
-    private Map<Cell, Set<Integer>> cellDisables(Cell cell) {
-        Map<Cell, Set<Integer>> cellDisables = disabledValues.get(cell);
-        if (cellDisables == null) {
-            cellDisables = new HashMap<>();
-            disabledValues.put(cell, cellDisables);
-        }
-        return cellDisables;
     }
 
     private void freeCell(final Board board, final CellValue cellValue) {
         final Cell cell = cellValue.getCell();
         final Integer value = board.getCellValue(cell);
         board.setCellValue(cell, null);
-        enableValue(cell, cell, value);
+        enableValue(cell, cell);
         relatedCells(cell).stream()
                 .filter(relatedCell -> isValueDisabled(relatedCell, cell, value))
-                .forEach(relatedCellToDisableValue -> enableValue(relatedCellToDisableValue, cell, value));
+                .forEach(relatedCellToDisableValue -> enableValue(relatedCellToDisableValue, cell));
     }
 
-    private void enableValue(final Cell cell, final Cell forCell, final Integer value) {
-        cellDisabledValues(cell, forCell).remove(value);
+    private void enableValue(final Cell cell, final Cell forCell) {
+        cellDisabledValues(cell).remove(forCell);
     }
 
     private Set<Cell> relatedCells(final Cell cell) {
@@ -184,7 +171,7 @@ public class SudokuBacktrack extends AbstractBacktrack<SudokuBacktrack.CellValue
                 .collect(Collectors.toSet());
     }
 
-    private Set<Cell> col(Cell cell) {
+    private Set<Cell> col(final Cell cell) {
         return IntStream.range(0, Board.SIZE)
                 .mapToObj(y -> new Cell(cell.getX(), y))
                 .collect(Collectors.toSet());
