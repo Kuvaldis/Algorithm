@@ -1,36 +1,52 @@
 package kuvaldis.algorithm.backtracking.sudoku;
 
-import lombok.Data;
+import lombok.AccessLevel;
 import lombok.Getter;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static java.lang.System.lineSeparator;
+import static java.util.stream.Collectors.joining;
 
 public class Board {
 
     public static final int SIZE = 9;
+    public static final int SQUARE_SIZE = 3;
 
-    @Getter
-    private int unfilled = SIZE * SIZE;
+    @Getter(AccessLevel.PUBLIC)
+    private final Set<Cell> emptyCells = new HashSet<>();
 
     private final Map<Cell, Integer> values = new HashMap<>();
 
     public void setCellValue(final Integer x, final Integer y, final Integer value) {
-        final Cell putCell = new Cell(x, y);
-        boolean contained = values.containsKey(putCell);
-        final Integer oldValue = values.put(putCell, value);
-        if (value != null) {
-            if ((!contained || oldValue == null)) {
-                unfilled--;
-            }
+        setCellValue(new Cell(x, y), value);
+    }
+
+    public void setCellValue(final Cell cell, final Integer value) {
+        values.put(cell, value);
+        if (value == null) {
+            emptyCells.add(cell);
         } else {
-            if (contained && oldValue != null) {
-                unfilled++;
-            }
+            emptyCells.remove(cell);
         }
     }
 
     public Integer getCellValue(final Integer x, final Integer y) {
-        return values.get(new Cell(x, y));
+        return getCellValue(new Cell(x, y));
+    }
+
+    public Integer getCellValue(final Cell cell) {
+        return values.get(cell);
+    }
+
+    @Override
+    public String toString() {
+        return IntStream.range(0, SIZE)
+                .mapToObj(y -> IntStream.range(0, SIZE)
+                        .mapToObj(x -> Optional.ofNullable(getCellValue(x, y)).map(Object::toString).orElse("*"))
+                        .collect(joining(" ")))
+                .collect(joining(lineSeparator()));
     }
 }

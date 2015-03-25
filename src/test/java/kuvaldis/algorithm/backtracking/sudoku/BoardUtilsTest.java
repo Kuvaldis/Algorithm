@@ -109,21 +109,21 @@ public class BoardUtilsTest {
 
     @Test
     public void testUnfilled() throws Exception {
-        assertEquals(45, board.getUnfilled());
+        assertEquals(45, board.getEmptyCells().size());
         board.setCellValue(0, 0, 1);
-        assertEquals(44, board.getUnfilled());
+        assertEquals(44, board.getEmptyCells().size());
         board.setCellValue(0, 0, null);
-        assertEquals(45, board.getUnfilled());
+        assertEquals(45, board.getEmptyCells().size());
         board.setCellValue(0, 0, 1);
-        assertEquals(44, board.getUnfilled());
+        assertEquals(44, board.getEmptyCells().size());
         board.setCellValue(0, 0, null);
-        assertEquals(45, board.getUnfilled());
+        assertEquals(45, board.getEmptyCells().size());
         board.setCellValue(1, 0, null);
-        assertEquals(45, board.getUnfilled());
+        assertEquals(45, board.getEmptyCells().size());
         board.setCellValue(2, 0, 1);
-        assertEquals(44, board.getUnfilled());
+        assertEquals(44, board.getEmptyCells().size());
         board.setCellValue(0, 1, null);
-        assertEquals(45, board.getUnfilled());
+        assertEquals(45, board.getEmptyCells().size());
     }
 
     private Integer i(int i) {

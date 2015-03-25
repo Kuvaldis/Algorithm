@@ -38,10 +38,11 @@ public class GraphPathsBacktrack extends AbstractBacktrack<Vertex, Set<List<Vert
     }
 
     @Override
-    protected void processSolution(List<Vertex> solutionsList, int solutionsSize, Input input) {
+    protected boolean processSolution(List<Vertex> solutionsList, int solutionsSize, Input input) {
         result.add(solutionsList.stream()
                 .limit(solutionsSize)
                 .collect(toList()));
+        return false;
     }
 
     @Override

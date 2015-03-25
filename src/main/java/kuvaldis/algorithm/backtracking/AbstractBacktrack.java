@@ -22,7 +22,9 @@ public abstract class AbstractBacktrack<E, R, D> implements Backtrack<R, D> {
     protected boolean backtrack(final List<E> solutionsList, final int start, final D input) {
         int nextSolutionSize = start;
         if (isSolution(solutionsList, nextSolutionSize, input)) {
-            processSolution(solutionsList, nextSolutionSize, input);
+            if (processSolution(solutionsList, nextSolutionSize, input)) {
+                return true;
+            }
         } else {
             final List<E> candidates = constructCandidates(solutionsList, ++nextSolutionSize - 1, input);
             for (E candidate : candidates) {
@@ -61,7 +63,7 @@ public abstract class AbstractBacktrack<E, R, D> implements Backtrack<R, D> {
 
     protected abstract boolean isSolution(List<E> solutionsList, int solutionsSize, D input);
 
-    protected abstract void processSolution(List<E> solutionsList, int solutionsSize, D input);
+    protected abstract boolean processSolution(List<E> solutionsList, int solutionsSize, D input);
 
     protected abstract List<E> constructCandidates(List<E> solutionsList, int solutionsSize, D input);
 }

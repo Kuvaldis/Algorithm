@@ -30,10 +30,11 @@ public class PermutationsBacktrack<E> extends AbstractBacktrack<Integer, Set<Lis
     }
 
     @Override
-    protected void processSolution(List<Integer> solutionsList, int solutionsSize, Set<E> input) {
+    protected boolean processSolution(List<Integer> solutionsList, int solutionsSize, Set<E> input) {
         result.add(solutionsList.stream()
                 .map(orderedSetList::get)
                 .collect(toList()));
+        return false;
     }
 
     @Override

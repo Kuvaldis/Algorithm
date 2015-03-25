@@ -28,11 +28,12 @@ public class SubsetsBacktrack<E> extends AbstractBacktrack<Boolean, Set<Set<E>>,
     }
 
     @Override
-    protected void processSolution(List<Boolean> solutionsList, int solutionsSize, Set<E> input) {
+    protected boolean processSolution(List<Boolean> solutionsList, int solutionsSize, Set<E> input) {
         result.add(IntStream.range(0, solutionsSize)
                 .mapToObj(i -> solutionsList.get(i) ? orderedSetList.get(i) : null)
                 .filter(Objects::nonNull)
                 .collect(toSet()));
+        return false;
     }
 
     @Override
