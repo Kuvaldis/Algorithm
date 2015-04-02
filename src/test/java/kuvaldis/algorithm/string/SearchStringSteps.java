@@ -1,4 +1,4 @@
-package kuvaldis.algorithm.strings;
+package kuvaldis.algorithm.string;
 
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;

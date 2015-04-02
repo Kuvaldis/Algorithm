@@ -1,4 +1,4 @@
-package kuvaldis.algorithm.strings;
+package kuvaldis.algorithm.string;
 
 import org.openjdk.jmh.annotations.Benchmark;
 

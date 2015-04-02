@@ -1,4 +1,4 @@
-package kuvaldis.algorithm.strings;
+package kuvaldis.algorithm.string;
 
 import static java.util.stream.IntStream.range;
 
