@@ -7,12 +7,12 @@ import java.util.stream.StreamSupport;
 
 import static org.junit.Assert.*;
 
-public class SearchSimilarSubstringTest {
+public class SimilarSubstringSearchTest {
 
     @Test
     public void testCompare() throws Exception {
-        final SearchSimilarSubstring searchSimilarSubstring = new SearchSimilarSubstring();
-        final Result result = searchSimilarSubstring.compare("tea", "There is no great genius without some touch of madness");
+        final SimilarSubstringSearch similarSubstringSearch = new SimilarSubstringSearch();
+        final Result result = similarSubstringSearch.compare("tea", "There is no great genius without some touch of madness");
         assertEquals(Cost.of(1), result.last().getCost());
         assertEquals("rea", StreamSupport.stream(result.spliterator(), false)
                 .map(ActionData::getLetterFrom)

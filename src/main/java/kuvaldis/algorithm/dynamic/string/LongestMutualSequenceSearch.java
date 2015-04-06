@@ -1,10 +1,9 @@
 package kuvaldis.algorithm.dynamic.string;
 
-import java.util.stream.IntStream;
-
 import static kuvaldis.algorithm.dynamic.string.Action.DELETE;
+import static kuvaldis.algorithm.dynamic.string.Action.INSERT;
 
-public class SearchSimilarSubstring extends AbstractStringCompare {
+public class LongestMutualSequenceSearch extends AbstractStringCompare {
 
     @Override
     protected ActionData colInit(int i, char sc) {
@@ -13,17 +12,12 @@ public class SearchSimilarSubstring extends AbstractStringCompare {
 
     @Override
     protected ActionData rowInit(int i, char tc) {
-        return new ActionData(Cost.ZERO, null, null);
+        return new ActionData(Cost.of(i), INSERT, tc);
     }
 
     @Override
     protected Cell goalCell(String s, String t, ActionData[][] resultMatrix) {
-        final int i = s.length() - 1;
-        final ActionData[] lastRow = resultMatrix[i];
-        return new Cell(i, IntStream.range(1, t.length())
-                .boxed()
-                .min((j1, j2) -> lastRow[j1].getCost().compareTo(lastRow[j2].getCost()))
-                .get());
+        return new Cell(s.length() - 1, t.length() - 1);
     }
 
     @Override
@@ -38,6 +32,6 @@ public class SearchSimilarSubstring extends AbstractStringCompare {
 
     @Override
     protected Cost match(char sc, char tc) {
-        return sc == tc ? Cost.ZERO : Cost.ONE;
+        return sc == tc ? Cost.ZERO : Cost.INFINITY;
     }
 }
