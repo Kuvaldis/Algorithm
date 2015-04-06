@@ -60,13 +60,17 @@ public abstract class AbstractStringCompare {
         final ActionData[][] matrix = new ActionData[s.length()][t.length()];
         matrix[0][0] = new ActionData(Cost.ZERO, null, null);
         for (int i = 1; i < s.length(); i++) {
-            matrix[i][0] = new ActionData(Cost.of(i), DELETE, s.charAt(i));
+            matrix[i][0] = colInit(i, s.charAt(i));
         }
         for (int i = 1; i < t.length(); i++) {
-            matrix[0][i] = new ActionData(Cost.of(i), INSERT, t.charAt(i));
+            matrix[0][i] = rowInit(i, t.charAt(i));
         }
         return matrix;
     }
+
+    protected abstract ActionData colInit(int i, char sc);
+
+    protected abstract ActionData rowInit(int i, char tc);
 
     protected abstract Cell goalCell(final String s, final String t, final ActionData[][] resultMatrix);
 

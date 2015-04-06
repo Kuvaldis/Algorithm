@@ -1,6 +1,20 @@
 package kuvaldis.algorithm.dynamic.string;
 
-public class StringDifference extends AbstractStringCompare {
+import static kuvaldis.algorithm.dynamic.string.Action.DELETE;
+import static kuvaldis.algorithm.dynamic.string.Action.INSERT;
+
+public class StringTransformation extends AbstractStringCompare {
+
+    @Override
+    protected ActionData colInit(int i, char sc) {
+        return new ActionData(Cost.of(i), DELETE, sc);
+    }
+
+    @Override
+    protected ActionData rowInit(int i, char tc) {
+        return new ActionData(Cost.of(i), INSERT, tc);
+    }
+
     @Override
     protected Cell goalCell(String s, String t, ActionData[][] resultMatrix) {
         return new Cell(s.length() - 1, t.length() - 1);
