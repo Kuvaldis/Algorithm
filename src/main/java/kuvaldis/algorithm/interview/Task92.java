@@ -16,14 +16,10 @@ public class Task92 {
                 } else {
                     f = m + 1;
                 }
-            } else if (x >= a[f]) {
+            } else if (x >= a[f] || x < a[m]) {
                 t = m - 1;
             } else {
-                if (x < a[m]) {
-                    t = m - 1;
-                } else {
-                    f = m + 1;
-                }
+                f = m + 1;
             }
         }
         return -1;
