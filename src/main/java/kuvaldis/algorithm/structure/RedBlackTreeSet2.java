@@ -139,4 +139,30 @@ public class RedBlackTreeSet2 {
         x.parent = y;
         y.right = x;
     }
+
+    // insert red node always
+
+    // the node is root. paint it black, so property 5 will not be violated
+    private void insertCase1(final Node node) {
+        if (node.parent == null) {
+            node.color = Color.Black;
+        } else {
+            insertCase2(node);
+        }
+
+    }
+
+    // the node is not root.
+    // if the parent is black, then property 5 is not violated, since number of blacks hasn't changed
+    private void insertCase2(final Node node) {
+        if (node.parent.color == Color.Black) {
+            return;
+        }
+        insertCase3(node);
+    }
+
+    // the node is not root and it's parent is red. Hence it's parent is not root either since by property 2 the root is always black
+    private void insertCase3(final Node node) {
+
+    }
 }
