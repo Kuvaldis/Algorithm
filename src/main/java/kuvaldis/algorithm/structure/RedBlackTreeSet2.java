@@ -2,7 +2,7 @@ package kuvaldis.algorithm.structure;
 
 /**
  * Only integer implementation, just to illustrate algorithm and exclude redundant information
- *
+ * <p>
  * Red-black tree is a binary search tree with the following properties:
  * 1. Each node is either black or red
  * 2. The root is black
@@ -25,6 +25,7 @@ public class RedBlackTreeSet2 {
     }
 
     Node root;
+    int size;
 
     /*
      * It's supposed that x has right child
@@ -138,6 +139,7 @@ public class RedBlackTreeSet2 {
                 }
             }
         }
+        size++;
         insertCase1(node);
     }
 
@@ -148,7 +150,6 @@ public class RedBlackTreeSet2 {
         } else {
             insertCase2(node);
         }
-
     }
 
     // the node is not root.
@@ -208,7 +209,7 @@ public class RedBlackTreeSet2 {
         if (node.parent.right == node && grandparent.left == node.parent) {
             rotateLeft(node.parent);
             insertCase5(node.left);
-        } else if(node.parent.left == node && grandparent.right == node.parent) {
+        } else if (node.parent.left == node && grandparent.right == node.parent) {
             rotateRight(node.parent);
             insertCase5(node.right);
         } else {
@@ -250,5 +251,275 @@ public class RedBlackTreeSet2 {
             }
         }
         return null;
+    }
+
+    public void delete(final int value) {
+        Node node = findNode(value);
+        if (node == null) {
+            return;
+        }
+
+        // for the case when the node to delete has two non NIL children we have to transform it
+        // to the node with one or zero children
+        // it may be done either finding successor or predecessor of the node.
+        // 1. successor - the lowest node in the right subtree (last left node without left node)
+        // 2. predecessor - the highest node in the left subtree (last right node without right node)
+        // we choose successor and change it's value to the value of the node to delete.
+        // the tree is still a search tree.
+        if (node.left != null && node.right != null) {
+            final Node successor = successor(node);
+            node.value = successor.value;
+            node = successor;
+        }
+        size--;
+        deleteNodeWithOneOrZeroChildren(node);
+    }
+
+    private Node findNode(final int value) {
+        if (root == null) {
+            return null;
+        }
+        Node node = root;
+        while (node != null) {
+            if (node.value == value) {
+                break;
+            }
+            if (value < node.value) {
+                node = node.left;
+            } else {
+                node = node.right;
+            }
+        }
+        return node;
+    }
+
+    // Here we remove the node with either non NIL left or right or both NIL children and make it red-black if there are rule violations
+    // After the replacement check node's color. There are two cases here:
+    // 1. The replacement is not null. Replace first. Then there are 2 subcases:
+    // 1.1. The replacement is red. Make it black, nothing is violated.
+    // 1.2. The replacement is black. Should be fixed as property number 5 is violated.
+    // 2. The replacement is null. Act with the node as 'phantom'. First rebalance the tree if it's black,
+    //    second replace it (with null actually).
+    private void deleteNodeWithOneOrZeroChildren(final Node node) {
+        final Node replacement = node.left != null ? node.left : node.right;
+
+        if (replacement != null) {
+            replaceNode(node, replacement);
+            if (node.color == Color.Black) {
+                if (replacement.color == Color.Red) {
+                    replacement.color = Color.Black;
+                } else {
+                    deleteCase1(replacement);
+                }
+            }
+        } else {
+            if (node.color == Color.Black) {
+                deleteCase1(node);
+            }
+            replaceNode(node, null);
+        }
+    }
+
+    // here we suppose the node has both left and right children
+    private Node successor(final Node node) {
+        Node result = node.right;
+        while (result.left != null) {
+            result = result.left;
+        }
+        return result;
+    }
+
+    // There are three possible cases here:
+    // 1. The node is root
+    // 2. The node is left child
+    // 3. The node is right child
+    private void replaceNode(final Node node, final Node replacement) {
+        // in any case replacement's parent should be node's parent
+        if (replacement != null) {
+            replacement.parent = node.parent;
+        }
+        if (node.parent == null) {
+            root = replacement;
+        } else if (node.parent.left == node) {
+            node.parent.left = replacement;
+        } else {
+            node.parent.right = replacement;
+        }
+        // in any case there shouldn't be any links from the node
+        node.parent = node.left = node.right = null;
+    }
+
+    // from here the node to work on is always black
+
+    // Here the node doesn't have any non-NIL child already
+    // Check if it's the root
+    private void deleteCase1(final Node node) {
+        // no parent, means it's the root
+        if (node.parent == null) {
+            return;
+        }
+        deleteCase2(node);
+    }
+
+
+    // The node is not the root, has parent. Still doesn't have any non-NIL child
+    // Check if sibling is red. If it is, make parent red, and sibling black. Then there are two cases:
+    // 1. The node is left child. Rotate parent to the left.
+    // 2. The node is right child. Rotate parent to the right.
+    // In any way go to delete case 3.
+    /*
+              |                                  |
+              P(b)                               S(b)
+             /  \                               /   \
+          N(b)   S(r)        ---------->      P(r)   Sr(b)
+         /  \    /   \                       /  \     /  \
+        1    2 Sl(b)  Sr(b)               N(b) Sl(b) 5    6
+              /  \   /  \                /  \   / \
+             3    4 5    6              1   2  3   4
+    */
+    private void deleteCase2(final Node node) {
+        final Node sibling = sibling(node);
+        if (sibling != null && sibling.color == Color.Red) {
+            sibling.color = Color.Black;
+            node.parent.color = Color.Red;
+            if (node.parent.left == node) {
+                rotateLeft(node.parent);
+            } else {
+                rotateRight(node.parent);
+            }
+        }
+        deleteCase3(node);
+    }
+
+    // The node is not the root, has parent
+    // Check if parent, sibling and sibling's children are black. If so, set sibling to red
+    // and rebalance tree for parent, because even though node's parent's subtree is balanced,
+    // after node's removing and the subtree has less black numbers, then parent's sibling's subtree,
+    // so property 5 is violated.
+    /*
+              |                                  |
+              P(b)                               P(b)
+             /  \                               /  \
+          N(b)   S(b)        ---------->     N(b)   S(r)
+         /  \    /   \                      /  \    /   \
+        1    2 Sl(b)  Sr(b)                1    2 Sl(b)  Sr(b)
+              /  \   /  \                        /  \   /  \
+             3    4 5    6                      3    4 5    6
+    */
+    private void deleteCase3(final Node node) {
+        final Node sibling = sibling(node);
+        if (node.parent.color == Color.Black &&
+                sibling.color == Color.Black &&
+                (sibling.left == null || sibling.left.color == Color.Black) &&
+                (sibling.right == null || sibling.right.color == Color.Black)) {
+            sibling.color = Color.Red;
+            deleteCase1(node.parent);
+        } else {
+            deleteCase4(node);
+        }
+    }
+
+    // the node is not the root and has parent
+    // The same case as delete case 3 but parent should be red
+    /*
+              |                                  |
+              P(r)                               P(b)
+             /  \                               /  \
+          N(b)   S(b)        ---------->     N(b)   S(r)
+         /  \    /   \                      /  \    /   \
+        1    2 Sl(b)  Sr(b)                1    2 Sl(b)  Sr(b)
+              /  \   /  \                        /  \   /  \
+             3    4 5    6                      3    4 5    6
+    */
+    private void deleteCase4(final Node node) {
+        final Node sibling = sibling(node);
+        if (node.parent.color == Color.Red &&
+                sibling.color == Color.Black &&
+                (sibling.left == null || sibling.left.color == Color.Black) &&
+                (sibling.right == null || sibling.right.color == Color.Black)) {
+            sibling.color = Color.Red;
+            node.parent.color = Color.Black;
+        } else {
+            deleteCase5(node);
+        }
+    }
+
+    // when we come here the node is still black with parent (doesn't matter what color it has).
+    // case 2 makes the node's sibling black and case 3 and 4 end up with sibling red when they don't go to case 5,
+    // always having black sibling when go to the next case.
+    // Two cases:
+    // 1. If the node is left, check if it's sibling's left child is red and right is black.
+    //    Make sibling red, it's left node black, rotate it to the right
+    // 2. If the node is right, check if it's sibling's right child is red and left is black.
+    //    Make sibling red, it's right node black, rotate it to the left
+    /*
+                |                                      |
+                P                                      P
+               /  \                                   /  \
+            N(b)   S(b)       --------->           N(b)   Sl(b)
+           /  \    /   \                          /  \    /   \
+          1    2 Sl(r)  Sr(b)                    1    2  3    S(r)
+                /  \   /  \                                   /  \
+               3    4 5    6                                 4   Sr(b)
+                                                                 /  \
+                                                                5    6
+     */
+    private void deleteCase5(final Node node) {
+        final Node sibling = sibling(node);
+        if (node.parent.left == node &&
+                sibling.left != null && sibling.left.color == Color.Red &&
+                (sibling.right == null || sibling.right.color == Color.Black)) {
+            sibling.color = Color.Red;
+            sibling.left.color = Color.Red;
+            rotateRight(sibling);
+        } else if (node.parent.right == node &&
+                sibling.right != null && sibling.right.color == Color.Red &&
+                (sibling.left == null || sibling.left.color == Color.Black)) {
+            sibling.color = Color.Red;
+            sibling.right.color = Color.Black;
+            rotateLeft(sibling);
+        }
+        deleteCase6(node);
+    }
+
+    // after case 5 the node is still black, has parent and black sibling.
+    // If the node is left child, then the sibling has right red child.
+    // If the node is right child, then the sibling has left red child.
+    // Make sibling's red child black and rotate parent. Make sibling's color the same as parent and parent black.
+    // It doesn't change black number in paths not going through the node. The node's paths still have one more black node.
+    /*
+            |                                 |
+            P                                 S
+           /  \                             /   \
+        N(b)   S(b)       --------->       P(b)  Sr(b)
+       /  \    /   \                      /  \   /   \
+      1    2  3    Sr(r)               N(b)   3 4     5
+                  /  \                 /  \
+                 4    5               1    2
+    */
+    private void deleteCase6(final Node node) {
+        final Node sibling = sibling(node);
+        sibling.color = node.parent.color;
+        node.parent.color = Color.Black;
+
+        if (node.parent.left == node) {
+            sibling.right.color = Color.Black;
+            rotateLeft(node.parent);
+        } else {
+            sibling.left.color = Color.Black;
+            rotateRight(node.parent);
+        }
+    }
+
+    private Node sibling(final Node node) {
+        if (node.parent.left == node) {
+            return node.parent.right;
+        } else {
+            return node.parent.left;
+        }
+    }
+
+    public int size() {
+        return size;
     }
 }

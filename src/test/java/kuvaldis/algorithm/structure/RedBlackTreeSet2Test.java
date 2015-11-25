@@ -2,25 +2,83 @@ package kuvaldis.algorithm.structure;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class RedBlackTreeSet2Test {
 
     @Test
-    public void testInsert() throws Exception {
+    public void testInsertDelete() throws Exception {
         final RedBlackTreeSet2 set = new RedBlackTreeSet2();
+        assertEquals(0, set.size());
+
         set.insert(13);
         assertTrue(checkIsRedBlack(set));
+        assertEquals(1, set.size());
+
         set.insert(2);
         assertTrue(checkIsRedBlack(set));
+        assertEquals(2, set.size());
+
         set.insert(34);
         assertTrue(checkIsRedBlack(set));
+        assertEquals(3, set.size());
+
+        set.insert(36);
+        assertTrue(checkIsRedBlack(set));
+        assertEquals(4, set.size());
+
+        set.insert(35);
+        assertTrue(checkIsRedBlack(set));
+        assertEquals(5, set.size());
+
         set.insert(4);
         assertTrue(checkIsRedBlack(set));
+        assertEquals(6, set.size());
+
         set.insert(577);
         assertTrue(checkIsRedBlack(set));
+        assertEquals(7, set.size());
+
         set.insert(576);
         assertTrue(checkIsRedBlack(set));
+        assertEquals(8, set.size());
+
+        set.delete(13);
+        assertTrue(checkIsRedBlack(set));
+        assertEquals(7, set.size());
+
+        set.delete(13);
+        assertTrue(checkIsRedBlack(set));
+        assertEquals(7, set.size());
+
+        set.delete(2);
+        assertTrue(checkIsRedBlack(set));
+        assertEquals(6, set.size());
+
+        set.delete(577);
+        assertTrue(checkIsRedBlack(set));
+        assertEquals(5, set.size());
+
+        set.delete(576);
+        assertTrue(checkIsRedBlack(set));
+        assertEquals(4, set.size());
+
+        set.delete(34);
+        assertTrue(checkIsRedBlack(set));
+        assertEquals(3, set.size());
+
+        set.delete(35);
+        assertTrue(checkIsRedBlack(set));
+        assertEquals(2, set.size());
+
+        set.delete(36);
+        assertTrue(checkIsRedBlack(set));
+        assertEquals(1, set.size());
+
+        set.delete(4);
+        assertTrue(checkIsRedBlack(set));
+        assertEquals(0, set.size());
     }
 
     private boolean checkIsRedBlack(final RedBlackTreeSet2 set) {
