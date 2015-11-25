@@ -350,6 +350,8 @@ public class RedBlackTreeSet2 {
     }
 
     // from here the node to work on is always black
+    // delete cases are needed to add one more black node to deleted node subtree
+    // or making sibling subtree have one less black node with sibling subtree rebalancing.
 
     // Here the node doesn't have any non-NIL child already
     // Check if it's the root
