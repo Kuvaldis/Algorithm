@@ -19,6 +19,13 @@ public class HashTest {
         printStats(buckets);
     }
 
+    // actually shows better deviation percent
+    @Test
+    public void testSdbm() throws Exception {
+        final int[] buckets = getBuckets(new SdbmHash());
+        printStats(buckets);
+    }
+
     private void printStats(final int[] buckets) {
         System.out.println(Arrays.toString(buckets));
         Arrays.sort(buckets);
