@@ -3,6 +3,7 @@ package kuvaldis.algorithm.hash;
 import org.apache.commons.lang.math.RandomUtils;
 import org.junit.Test;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 
 public class HashTest {
@@ -26,6 +27,14 @@ public class HashTest {
         printStats(buckets);
     }
 
+    // first 8 buckets are just ignored. Only really big strings would fill them
+    @Test
+    public void testLoseLose() throws Exception {
+        final int[] buckets = getBuckets(new LoseLoseHash());
+        printStats(buckets);
+    }
+
+
     private void printStats(final int[] buckets) {
         System.out.println(Arrays.toString(buckets));
         Arrays.sort(buckets);
@@ -48,11 +57,11 @@ public class HashTest {
     }
 
     private int deviation(final int[] buckets, final int mean) {
-        int sum = 0;
+        BigInteger sum = BigInteger.ZERO;
         for (int bucket : buckets) {
-            sum += (bucket - mean) * (bucket - mean);
+            sum = sum.add(BigInteger.valueOf(bucket - mean).pow(2));
         }
-        return (int) Math.sqrt(sum / (buckets.length - 1));
+        return (int) Math.sqrt(sum.divide(BigInteger.valueOf(buckets.length - 1)).longValue());
     }
 
     private int[] getBuckets(final StringHash stringHash) throws Exception {
