@@ -3,6 +3,7 @@ package kuvaldis.algorithm.structure;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class BTreeSetTest {
 
@@ -19,5 +20,14 @@ public class BTreeSetTest {
         set.add(40);
         set.add(41);
         assertEquals(9, set.size());
+        assertTrue(set.contains(1));
+        assertTrue(set.contains(2));
+        assertTrue(set.contains(11));
+        assertTrue(set.contains(15));
+        assertTrue(set.contains(18));
+        assertTrue(set.contains(36));
+        assertTrue(set.contains(38));
+        assertTrue(set.contains(40));
+        assertTrue(set.contains(41));
     }
 }

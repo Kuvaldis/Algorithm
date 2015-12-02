@@ -123,4 +123,24 @@ public class BTreeSet {
     public int height() {
         return height;
     }
+
+    public boolean contains(final int value) {
+        Node node = root;
+        int i = 0;
+        while (true) {
+            if (i == node.length || value < node.values[i]) {
+                if (node.children[i] == null) {
+                    break;
+                } else {
+                    node = node.children[i];
+                    i = 0;
+                }
+            } else if (value == node.values[i]) {
+                return true;
+            } else {
+                i++;
+            }
+        }
+        return false;
+    }
 }
