@@ -147,4 +147,86 @@ public class BTreeSet {
         }
         return false;
     }
+
+    public void delete(final int value) {
+        if (root == null) {
+            return;
+        }
+        Node node = root;
+        int deletePosition = 0;
+        int level = 1;
+        while (true) {
+            if (deletePosition == node.length || value < node.values[deletePosition]) {
+                if (node.children[deletePosition] == null) {
+                    return;
+                } else {
+                    node = node.children[deletePosition];
+                    deletePosition = 0;
+                    level++;
+                }
+            } else if (value == node.values[deletePosition]) {
+                break;
+            } else {
+                deletePosition++;
+            }
+        }
+        doDelete(node, level, deletePosition);
+    }
+
+    // There are 3 cases:
+    // 1. The node is leaf and it has more then M/2 values. Just delete position.
+    // 2. The node is leaf and it has less equal to M/2 values:
+    //     a. There is a sibling with more then M/2 values. Do the following (the sibling is right).
+    //        Move parent value to new value in the current node, replace parent value with right node's left most value
+    //        and remove it from sibling. It would be case number one then:
+    /*
+             []2[]5[]                      []2[]6[]
+           /    |    \                   /     |      \
+         ... []3[]4[] []6[]7[]8[] ---> ... []3[]4[]5[] []7[]8[]
+                  ^                             ^
+                  delete                        delete (now it's case number 1)
+     */
+    //     b. There is no sibling with more then M/2 values. Merge shared parent, the node and right or left sibling,
+    //        like so (there is right sibling):
+    /*
+             []2[]5[]                     []2[]
+           /    |    \                  /      \
+         ... []3[]4[] []6[]7[] --->   ...  []3[]4[]5[]6[]7[]
+                  ^                             ^
+                  delete                        delete
+     */
+    // 3. The node is not leaf
+    //     a. Left child has more then M/2 values. Swap node's value and left's child right most value. Remove new left most value:
+    /*
+                 delete
+                 |
+            []2[]6[]                           []2[]5[]
+          /    |       \                     /    |       \
+        ... []3[]4[]5[] []7[]8[]   --->    ... []3[]4[]6[] []7[]8[]
+                                                       ^
+                                                       delete
+     */
+    //     b. Right child has more then M/2 values. Swap node's value and right's child left most value. Remove:
+    /*
+                 delete
+                 |
+            []2[]5[]                           []2[]6[]
+          /    |     \                        /    |    \
+        ... []3[]4[]  []6[]7[]8[]   --->    ... []3[]4[]  []5[]7[]8[]
+                                                            ^
+                                                            delete
+     */
+    //     c. No such children. Merge left child, value, right child to one node and remove the value:
+    /*
+                 delete
+                 |
+            []2[]5[]                           []2[]
+          /    |     \                        /       \
+        ... []3[]4[]  []6[]7[]   --->    ...    []3[]4[]5[]6[]7[]
+                                                        ^
+                                                        delete
+     */
+    private void doDelete(final Node node, final int level, final int deletePosition) {
+
+    }
 }
