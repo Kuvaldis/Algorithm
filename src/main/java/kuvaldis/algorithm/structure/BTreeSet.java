@@ -24,6 +24,10 @@ public class BTreeSet {
     }
 
     public void add(final int value) {
+        if (contains(value)) {
+            return;
+        }
+        if (root.length == 0) height++;
         final Node newRoot = insert(root, value);
         size++;
         if (newRoot == null) return;
