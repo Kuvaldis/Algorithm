@@ -17,6 +17,7 @@ public class BTreeSet {
         private final int[] values = new int[M + 1];
         private int length;
         private Node[] children = new Node[M + 2];
+        public Node parent;
     }
 
     public BTreeSet() {
@@ -112,12 +113,14 @@ public class BTreeSet {
             secondHalf.values[i - 1] = node.values[M / 2 + i];
         }
         secondHalf.children[0] = node.children[M / 2 + 1];
-        final Node newRoot = new Node();
-        newRoot.length = 1;
-        newRoot.children[0] = node;
-        newRoot.children[1] = secondHalf;
-        newRoot.values[0] = node.values[M / 2];
-        return newRoot;
+        final Node newParent = new Node();
+        newParent.length = 1;
+        newParent.children[0] = node;
+        newParent.children[1] = secondHalf;
+        newParent.values[0] = node.values[M / 2];
+        node.parent = newParent;
+        secondHalf.parent = newParent;
+        return newParent;
     }
 
     public int size() {
@@ -154,7 +157,7 @@ public class BTreeSet {
         }
         Node node = root;
         int deletePosition = 0;
-        int level = 1;
+        int level = 0;
         while (true) {
             if (deletePosition == node.length || value < node.values[deletePosition]) {
                 if (node.children[deletePosition] == null) {
@@ -173,28 +176,6 @@ public class BTreeSet {
         doDelete(node, level, deletePosition);
     }
 
-    // There are 3 cases:
-    // 1. The node is leaf and it has more then M/2 values. Just delete position.
-    // 2. The node is leaf and it has less equal to M/2 values:
-    //     a. There is a sibling with more then M/2 values. Do the following (the sibling is right).
-    //        Move parent value to new value in the current node, replace parent value with right node's left most value
-    //        and remove it from sibling. It would be case number one then:
-    /*
-             []2[]5[]                      []2[]6[]
-           /    |    \                   /     |      \
-         ... []3[]4[] []6[]7[]8[] ---> ... []3[]4[]5[] []7[]8[]
-                  ^                             ^
-                  delete                        delete (now it's case number 1)
-     */
-    //     b. There is no sibling with more then M/2 values. Merge shared parent, the node and right or left sibling,
-    //        like so (there is right sibling):
-    /*
-             []2[]5[]                     []2[]
-           /    |    \                  /      \
-         ... []3[]4[] []6[]7[] --->   ...  []3[]4[]5[]6[]7[]
-                  ^                             ^
-                  delete                        delete
-     */
     // 3. The node is not leaf
     //     a. Left child has more then M/2 values. Swap node's value and left's child right most value. Remove new left most value:
     /*
@@ -226,7 +207,107 @@ public class BTreeSet {
                                                         ^
                                                         delete
      */
+    // 3 cases
     private void doDelete(final Node node, final int level, final int deletePosition) {
+        deleteCase1(node, level, deletePosition);
+    }
 
+    // 1. The node is leaf and it has more then M/2 values. Just delete position.
+    private void deleteCase1(final Node node, final int level, final int deletePosition) {
+        if (level == height - 1 && node.length > M / 2) {
+            deleteLeafPosition(node, deletePosition);
+        } else {
+            deleteCase2(node, level, deletePosition);
+        }
+    }
+
+    // 2. The node is leaf and it has less equal to M/2 values:
+    private void deleteCase2(final Node node, final int level, final int deletePosition) {
+        if (level == height - 1 && node.length <= M / 2) {
+            deleteCase2a(node, level, deletePosition);
+        } else {
+            deleteCase3(node, level, deletePosition);
+        }
+    }
+
+    // 2.a. There is a sibling with more then M/2 values. Do the following (the sibling is right).
+    //      Move parent value to new value in the current node, replace parent value with right node's left most value
+    //      and remove it from sibling. It would be case number one then:
+    /*
+             []2[]5[]                      []2[]6[]
+           /    |    \                   /     |      \
+         ... []3[]4[] []6[]7[]8[] ---> ... []3[]4[]5[] []7[]8[]
+                  ^                             ^
+                  delete                        delete (now it's case number 1)
+     */
+    private void deleteCase2a(final Node node, final int level, final int deletePosition) {
+        final int nodeParentIndex = nodeParentIndex(node);
+        final Node leftSibling = leftSibling(node, nodeParentIndex);
+        final Node rightSibling = rightSibling(node, nodeParentIndex);
+        if (leftSibling != null && leftSibling.length > M / 2) {
+            insertValue(node, node.parent.values[nodeParentIndex - 1], 0);
+            node.parent.values[nodeParentIndex - 1] = leftSibling.values[leftSibling.length - 1];
+            deleteLeafPosition(leftSibling, leftSibling.length - 1);
+        } else if (rightSibling != null && rightSibling.length > M / 2) {
+            insertValue(node, node.parent.values[nodeParentIndex], node.length);
+            node.parent.values[nodeParentIndex] = rightSibling.values[0];
+            deleteLeafPosition(rightSibling, 0);
+        } else {
+            deleteCase2b(node, level, deletePosition);
+        }
+    }
+
+    // 2.b. There is no sibling with more then M/2 values. Merge shared parent, the node and right or left sibling,
+    //      like so (there is right sibling):
+    /*
+             []2[]5[]                     []2[]
+           /    |    \                  /      \
+         ... []3[]4[] []6[]7[] --->   ...  []3[]4[]5[]6[]7[]
+                  ^                             ^
+                  delete                        delete
+     */
+    private void deleteCase2b(final Node node, final int level, final int deletePosition) {
+
+    }
+
+
+    private void deleteCase3(final Node node, final int level, final int deletePosition) {
+
+    }
+
+    // only for leaves, so no children
+    private void deleteLeafPosition(final Node node, final int deletePosition) {
+        //noinspection ManualArrayCopy
+        for (int i = deletePosition; i <= node.length; i++) {
+            node.values[i] = node.values[i + 1];
+        }
+        node.length--;
+    }
+
+    private int nodeParentIndex(final Node node) {
+        if (node.parent == null) {
+            return -1;
+        }
+        final Node parent = node.parent;
+        for (int i = 0; i <= parent.length; i++) {
+            if (parent.children[i] == node) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private Node leftSibling(final Node node, final int parentIndex) {
+        if (parentIndex > 0) {
+            return node.parent.children[parentIndex - 1];
+        }
+        return null;
+    }
+
+    private Node rightSibling(final Node node, final int parentIndex) {
+        if (parentIndex >= 0 && parentIndex < node.parent.length) {
+            return node.parent.children[parentIndex + 1];
+        }
+        return null;
     }
 }
