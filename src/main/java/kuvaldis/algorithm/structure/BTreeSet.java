@@ -349,12 +349,13 @@ public class BTreeSet {
             }
         }
         deletePositionWithRightChild(node, deletePosition);
-        rightChild.parent = null;
         deleteCase1(leftChild, level + 1, leftChildBeforeMergeLength);
     }
 
     private void deletePositionWithRightChild(final Node node, final int deletePosition) {
-        //noinspection ManualArrayCopy
+        if (node.children[deletePosition + 1] != null) {
+            node.children[deletePosition + 1].parent = null;
+        }
         for (int i = deletePosition; i < node.length; i++) {
             if (i < M) {
                 node.values[i] = node.values[i + 1];
