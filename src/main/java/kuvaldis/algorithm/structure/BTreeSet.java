@@ -61,7 +61,7 @@ public class BTreeSet {
 
         // if we are here, then either there is childNewRoot to merge into current or the value should be added into current
         if (childNewRoot != null) {
-            insertChildrenRoot(insertIntoNode, childNewRoot, insertPosition);
+            insertNode(insertIntoNode, childNewRoot, insertPosition);
             if (insertIntoNode.length > M) {
                 return split(insertIntoNode);
             }
@@ -75,18 +75,19 @@ public class BTreeSet {
     }
 
     // runs when children node has been split on two and new root should be inserted to the current node
-    private void insertChildrenRoot(final Node insertIntoNode, final Node childrenRoot, final int position) {
-        for (int i = childrenRoot.length; i > position; i--) {
-            childrenRoot.values[i] = childrenRoot.values[i - 1];
-            childrenRoot.children[i + 1] = childrenRoot.children[i];
+    private void insertNode(final Node insertIntoNode, final Node node, final int position) {
+        for (int i = node.length; i > position; i--) {
+            node.values[i] = node.values[i - 1];
+            node.children[i + 1] = node.children[i];
         }
-        insertIntoNode.values[position] = childrenRoot.values[0];
-        insertIntoNode.children[position] = childrenRoot.children[0];
-        insertIntoNode.children[position + 1] = childrenRoot.children[1];
+        insertIntoNode.values[position] = node.values[0];
+        node.children[0].parent = insertIntoNode;
+        insertIntoNode.children[position] = node.children[0];
+        node.children[1].parent = insertIntoNode;
+        insertIntoNode.children[position + 1] = node.children[1];
         insertIntoNode.length++;
     }
 
-    // if we insert value, then there is not children for current node
     private void insertValue(final Node node, final int value, final int position) {
         //noinspection ManualArrayCopy
         for (int i = node.length; i > position; i--) {
@@ -174,39 +175,16 @@ public class BTreeSet {
             }
         }
         doDelete(node, level, deletePosition);
+        size--;
+        if (root.length == 0) {
+            root = root.children[0];
+            height--;
+        }
+        if (root == null) {
+            root = new Node();
+        }
     }
 
-    // 3. The node is not leaf
-    //     a. Left child has more then M/2 values. Swap node's value and left's child right most value. Remove new left most value:
-    /*
-                 delete
-                 |
-            []2[]6[]                           []2[]5[]
-          /    |       \                     /    |       \
-        ... []3[]4[]5[] []7[]8[]   --->    ... []3[]4[]6[] []7[]8[]
-                                                       ^
-                                                       delete
-     */
-    //     b. Right child has more then M/2 values. Swap node's value and right's child left most value. Remove:
-    /*
-                 delete
-                 |
-            []2[]5[]                           []2[]6[]
-          /    |     \                        /    |    \
-        ... []3[]4[]  []6[]7[]8[]   --->    ... []3[]4[]  []5[]7[]8[]
-                                                            ^
-                                                            delete
-     */
-    //     c. No such children. Merge left child, value, right child to one node and remove the value:
-    /*
-                 delete
-                 |
-            []2[]5[]                           []2[]
-          /    |     \                        /       \
-        ... []3[]4[]  []6[]7[]   --->    ...    []3[]4[]5[]6[]7[]
-                                                        ^
-                                                        delete
-     */
     // 3 cases
     private void doDelete(final Node node, final int level, final int deletePosition) {
         deleteCase1(node, level, deletePosition);
@@ -215,7 +193,7 @@ public class BTreeSet {
     // 1. The node is leaf and it has more then M/2 values. Just delete position.
     private void deleteCase1(final Node node, final int level, final int deletePosition) {
         if (level == height - 1 && node.length > M / 2) {
-            deleteLeafPosition(node, deletePosition);
+            deletePositionWithRightChild(node, deletePosition);
         } else {
             deleteCase2(node, level, deletePosition);
         }
@@ -224,7 +202,7 @@ public class BTreeSet {
     // 2. The node is leaf and it has less equal to M/2 values:
     private void deleteCase2(final Node node, final int level, final int deletePosition) {
         if (level == height - 1 && node.length <= M / 2) {
-            deleteCase2a(node, level, deletePosition);
+            deleteCase2a(node, deletePosition);
         } else {
             deleteCase3(node, level, deletePosition);
         }
@@ -240,20 +218,22 @@ public class BTreeSet {
                   ^                             ^
                   delete                        delete (now it's case number 1)
      */
-    private void deleteCase2a(final Node node, final int level, final int deletePosition) {
+    private void deleteCase2a(final Node node, final int deletePosition) {
         final int nodeParentIndex = nodeParentIndex(node);
         final Node leftSibling = leftSibling(node, nodeParentIndex);
         final Node rightSibling = rightSibling(node, nodeParentIndex);
         if (leftSibling != null && leftSibling.length > M / 2) {
             insertValue(node, node.parent.values[nodeParentIndex - 1], 0);
             node.parent.values[nodeParentIndex - 1] = leftSibling.values[leftSibling.length - 1];
-            deleteLeafPosition(leftSibling, leftSibling.length - 1);
+            deletePositionWithRightChild(leftSibling, leftSibling.length - 1);
+            deletePositionWithRightChild(node, deletePosition + 1);
         } else if (rightSibling != null && rightSibling.length > M / 2) {
             insertValue(node, node.parent.values[nodeParentIndex], node.length);
             node.parent.values[nodeParentIndex] = rightSibling.values[0];
-            deleteLeafPosition(rightSibling, 0);
+            deletePositionWithRightChild(rightSibling, 0);
+            deletePositionWithRightChild(node, deletePosition);
         } else {
-            deleteCase2b(node, level, deletePosition);
+            deleteCase2b(node, deletePosition);
         }
     }
 
@@ -262,25 +242,126 @@ public class BTreeSet {
     /*
              []2[]5[]                     []2[]
            /    |    \                  /      \
-         ... []3[]4[] []6[]7[] --->   ...  []3[]4[]5[]6[]7[]
-                  ^                             ^
-                  delete                        delete
+         ... []3[]4[] []6[]7[] --->   ...  []3[]5[]6[]7[]
+                  ^
+                  delete
      */
-    private void deleteCase2b(final Node node, final int level, final int deletePosition) {
-
-    }
-
-
-    private void deleteCase3(final Node node, final int level, final int deletePosition) {
-
-    }
-
-    // only for leaves, so no children
-    private void deleteLeafPosition(final Node node, final int deletePosition) {
-        //noinspection ManualArrayCopy
-        for (int i = deletePosition; i <= node.length; i++) {
-            node.values[i] = node.values[i + 1];
+    private void deleteCase2b(final Node node, final int deletePosition) {
+        final int nodeParentIndex = nodeParentIndex(node);
+        final Node leftSibling = leftSibling(node, nodeParentIndex);
+        final Node rightSibling = rightSibling(node, nodeParentIndex);
+        deletePositionWithRightChild(node, deletePosition);
+        if (leftSibling != null) {
+            // everything is added to the left sibling
+            insertValue(leftSibling, node.parent.values[nodeParentIndex - 1], leftSibling.length);
+            // maybe there is a better way
+            for (int i = 0; i < node.length; i++) {
+                insertValue(leftSibling, node.values[i], leftSibling.length);
+            }
+            deletePositionWithRightChild(node.parent, nodeParentIndex - 1);
+            node.parent = null;
+        } else if (rightSibling != null) {
+            //everything is added to the node
+            insertValue(node, node.parent.values[nodeParentIndex], node.length);
+            // maybe there is a better way
+            for (int i = 0; i < rightSibling.length; i++) {
+                insertValue(node, rightSibling.values[i], node.length);
+            }
+            deletePositionWithRightChild(node.parent, nodeParentIndex);
+            rightSibling.parent = null;
         }
+    }
+
+    // 3. The node is not leaf
+    private void deleteCase3(final Node node, final int level, final int deletePosition) {
+        if (level < height - 1) {
+            deleteCase3a(node, level, deletePosition);
+        }
+    }
+
+    // 3.a. Left child has more then M/2 values. Swap node's value and left's child right most value. Remove new right most value:
+    /*
+                 delete
+                 |
+            []2[]6[]                           []2[]5[]
+          /    |       \                     /    |       \
+        ... []3[]4[]5[] []7[]8[]   --->    ... []3[]4[]6[] []7[]8[]
+                                                       ^
+                                                       delete
+     */
+    private void deleteCase3a(final Node node, final int level, final int deletePosition) {
+        final Node leftChild = node.children[deletePosition];
+        if (leftChild.length > M / 2) {
+            leftChild.values[leftChild.length - 1] ^= node.values[deletePosition];
+            node.values[deletePosition] ^= leftChild.values[leftChild.length - 1];
+            leftChild.values[leftChild.length - 1] ^= node.values[deletePosition];
+            deleteCase1(leftChild, level + 1, leftChild.length - 1);
+        } else {
+            deleteCase3b(node, level, deletePosition);
+        }
+    }
+
+    // 3.b. Right child has more then M/2 values. Swap node's value and right's child left most value. Remove new left most value:
+    /*
+                 delete
+                 |
+            []2[]5[]                           []2[]6[]
+          /    |     \                        /    |    \
+        ... []3[]4[]  []6[]7[]8[]   --->    ... []3[]4[]  []5[]7[]8[]
+                                                            ^
+                                                            delete
+     */
+    private void deleteCase3b(final Node node, final int level, final int deletePosition) {
+        final Node rightChild = node.children[deletePosition + 1];
+        if (rightChild.length > M / 2) {
+            rightChild.values[0] ^= node.values[deletePosition];
+            node.values[deletePosition] ^= rightChild.values[0];
+            rightChild.values[0] ^= node.values[deletePosition];
+            deleteCase1(rightChild, level + 1, 0);
+        } else {
+            deleteCase3c(node, level, deletePosition);
+        }
+    }
+
+    // 3.c. No such children. Merge left child, value, right child to one node and remove the value:
+    /*
+                 delete
+                 |
+            []2[]5[]                           []2[]
+          /    |     \                        /       \
+        ... []3[]4[]  []6[]7[]   --->    ...    []3[]4[]5[]6[]7[]
+                                                        ^
+                                                        delete
+     */
+    private void deleteCase3c(final Node node, final int level, final int deletePosition) {
+        final Node leftChild = node.children[deletePosition];
+        final Node rightChild = node.children[deletePosition + 1];
+        final int leftChildBeforeMergeLength = leftChild.length;
+        insertValue(leftChild, node.values[deletePosition], leftChild.length);
+        for (int i = 0; i < rightChild.length; i++) {
+            insertValue(leftChild, rightChild.values[i], leftChild.length);
+        }
+        for (int i = 0; i <= rightChild.length; i++) {
+            // children are not leaves
+            if (level + 1 < height - 1) {
+                rightChild.children[i].parent = leftChild;
+                leftChild.children[leftChildBeforeMergeLength + 1 + i] = rightChild.children[i];
+            }
+        }
+        deletePositionWithRightChild(node, deletePosition);
+        rightChild.parent = null;
+        deleteCase1(leftChild, level + 1, leftChildBeforeMergeLength);
+    }
+
+    private void deletePositionWithRightChild(final Node node, final int deletePosition) {
+        //noinspection ManualArrayCopy
+        for (int i = deletePosition; i < node.length; i++) {
+            if (i < M) {
+                node.values[i] = node.values[i + 1];
+                node.children[i + 1] = node.children[i + 2];
+            }
+        }
+        node.children[node.length] = null;
         node.length--;
     }
 
