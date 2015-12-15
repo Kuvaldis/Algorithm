@@ -11,7 +11,7 @@ public class Hashtable {
     private static final int MINIMUM_CAPACITY = 1 << 4; // 16
     private static final int MAXIMUM_CAPACITY = 1 << 30; // 1 << 31 gives negative value
 
-    private static final float LOAD_FACTOR = 0.5f;
+    private static final float LOAD_FACTOR = 0.9f;
 
     Node[] buckets = new Node[DEFAULT_INITIAL_BUCKETS_SIZE];
 
