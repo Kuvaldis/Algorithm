@@ -18,13 +18,14 @@ import static java.util.stream.Stream.generate;
 import static java.util.stream.Stream.iterate;
 
 /**
- * Finds minimum set and quantity of values from given set needed to get given sum
+ * Finds minimum set and values number from given set of values, needed to obtain given sum
+ * For instance to if we have only set of {1, 5} and we want to collect 12, then the result will be
+ * 2 times 5 and 2 times 1
  */
 public class NumbersMinimumCountSumSearch {
 
     private static final Comparator<ItemData> TOTAL_ITEM_COUNT_COMPARATOR =
             (o1, o2) -> o1.totalCount.compareTo(o2.totalCount);
-    ;
 
     @Data
     public class ItemData implements Comparable<ItemData> {
@@ -34,7 +35,7 @@ public class NumbersMinimumCountSumSearch {
         private final Integer totalCount;
 
         @Override
-        public int compareTo(final ItemData o) {
+        public int compareTo(@SuppressWarnings("NullableProblems") final ItemData o) {
             return this.totalCount.compareTo(o.totalCount);
         }
     }
