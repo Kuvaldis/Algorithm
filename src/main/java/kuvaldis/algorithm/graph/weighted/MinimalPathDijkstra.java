@@ -42,7 +42,7 @@ public class MinimalPathDijkstra {
             }
             currentVertex = null;
             Integer minDistance = Integer.MAX_VALUE;
-            for (int i = 1; i < graph.size(); i++) {
+            for (int i = 1; i <= graph.size(); i++) {
                 WeightedVertex vertex = graph.getVertex(i);
                 Integer distance = distances.getOrDefault(vertex, Integer.MAX_VALUE);
                 if (!inTree.contains(vertex) && distance < minDistance) {

@@ -6,6 +6,8 @@ import kuvaldis.algorithm.graph.weighted.domain.WeightedVertex;
 
 import java.util.*;
 
+// minimal spanning tree is a connected sub graph of a given undirected graph including all the vertices from
+// the given graph so the summary edges wight is minimal
 public class MinimalSpanningTreePrim {
 
     private final WeightedGraph graph;
