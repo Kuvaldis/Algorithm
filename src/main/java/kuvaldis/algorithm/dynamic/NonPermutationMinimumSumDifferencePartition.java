@@ -9,6 +9,9 @@ import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * Splits the given list on n partitions with minimum difference between sum of elements in each partition
+ */
 class NonPermutationMinimumSumDifferencePartition {
 
     @Data
