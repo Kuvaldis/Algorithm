@@ -15,14 +15,27 @@ public final class BitArray {
         this.data = new long[dataSize];
     }
 
-    public void setBit(final int bit, final Boolean val) {
-        final int cell = bit >> 6;
-        final long cellBits = data[cell];
-        final long bitToSet = 1l << (bit & ((1 << 6) - 1));
-        data[cell] = (cellBits - (cellBits & bitToSet)) | (val ? bitToSet : 0);
+    public void setBit(final int index) {
+        setBit(index, 1);
     }
 
-    public boolean getBit(final int bit) {
-        return (data[bit >> 6] & (1l << (bit & ((1 << 6) - 1)))) != 0;
+    public void unSetBit(final int index) {
+        setBit(index, 0);
+    }
+
+    private void setBit(final int index, final long val) {
+        final int cell = index >> 6;
+        final long cellBits = data[cell];
+        final long bitToSet = 1l << (index & ((1 << 6) - 1));
+        final long valToSet = val << (index & ((1 << 6) - 1));
+        data[cell] = (cellBits - (cellBits & bitToSet)) | valToSet;
+    }
+
+    public long getBit(final int index) {
+        return (int) (data[index >> 6] >>> (index & ((1 << 6) - 1)));
+    }
+
+    public boolean isSet(final int index) {
+        return getBit(index) > 0;
     }
 }

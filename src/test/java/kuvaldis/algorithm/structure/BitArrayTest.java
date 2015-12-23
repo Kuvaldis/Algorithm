@@ -13,28 +13,28 @@ public class BitArrayTest {
         assertEquals(2, new BitArray(128).data.length);
 
         final BitArray bitArray = new BitArray(1024);
-        assertEquals(false, bitArray.getBit(0));
-        bitArray.setBit(0, true);
-        assertEquals(true, bitArray.getBit(0));
-        bitArray.setBit(0, false);
-        assertEquals(false, bitArray.getBit(0));
+        assertEquals(0, bitArray.getBit(0));
+        bitArray.setBit(0);
+        assertEquals(1, bitArray.getBit(0));
+        bitArray.unSetBit(0);
+        assertEquals(0, bitArray.getBit(0));
 
-        assertEquals(false, bitArray.getBit(63));
-        bitArray.setBit(63, true);
-        assertEquals(true, bitArray.getBit(63));
-        bitArray.setBit(63, false);
-        assertEquals(false, bitArray.getBit(63));
+        assertEquals(0, bitArray.getBit(63));
+        bitArray.setBit(63);
+        assertEquals(1, bitArray.getBit(63));
+        bitArray.unSetBit(63);
+        assertEquals(0, bitArray.getBit(63));
 
-        assertEquals(false, bitArray.getBit(64));
-        bitArray.setBit(64, true);
-        assertEquals(true, bitArray.getBit(64));
-        bitArray.setBit(64, false);
-        assertEquals(false, bitArray.getBit(64));
+        assertEquals(0, bitArray.getBit(64));
+        bitArray.setBit(64);
+        assertEquals(1, bitArray.getBit(64));
+        bitArray.unSetBit(64);
+        assertEquals(0, bitArray.getBit(64));
 
-        assertEquals(false, bitArray.getBit(127));
-        bitArray.setBit(127, true);
-        assertEquals(true, bitArray.getBit(127));
-        bitArray.setBit(127, false);
-        assertEquals(false, bitArray.getBit(127));
+        assertEquals(0, bitArray.getBit(127));
+        bitArray.setBit(127);
+        assertEquals(1, bitArray.getBit(127));
+        bitArray.unSetBit(127);
+        assertEquals(0, bitArray.getBit(127));
     }
 }
