@@ -15,14 +15,15 @@ public final class BitArray {
         this.data = new long[dataSize];
     }
 
-    public void setBit(final int bit, final Boolean val) {
-        final int cell = bit >> 6;
+    public void setBit(final int index, final int val) {
+        final int cell = index >> 6;
         final long cellBits = data[cell];
-        final long bitToSet = 1l << (bit & ((1 << 6) - 1));
-        data[cell] = (cellBits - (cellBits & bitToSet)) | (val ? bitToSet : 0);
+        final long bitToSet = 1l << (index & ((1 << 6) - 1));
+        final long valToSet = val << (index & ((1 << 6) - 1));
+        data[cell] = (cellBits - (cellBits & bitToSet)) | valToSet;
     }
 
-    public boolean getBit(final int bit) {
-        return (data[bit >> 6] & (1l << (bit & ((1 << 6) - 1)))) != 0;
+    public int getBit(final int index) {
+        return (int) ((data[index >> 6] >>> (index & ((1 << 6) - 1))) & 1);
     }
 }
