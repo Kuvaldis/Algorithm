@@ -25,7 +25,7 @@ expected worst-case space complexity is O(1).
 public class CountDiv {
 
     public int solution(int a, int b, int k) {
-        int result = b /k - a / k;
+        int result = b / k - a / k;
         if (a % k == 0) {
             result++;
         }
