@@ -19,7 +19,7 @@ Example: for amount=4 (4?) and denominations=[1,2,3][1,2,3] (1?, 2? and 3?), you
 2?, 2?
 
  */
-public class Task4 {
+public class Task5 {
     public int solution(final int amount, final int[] denominations) {
         final int[] ways = new int[amount + 1];
         // O(amount * denominations.length)
