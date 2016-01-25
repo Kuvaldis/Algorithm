@@ -40,12 +40,12 @@ public class NSmallestMultiple {
             queue.add(new Val(value, value));
         }
         // O(n * log(a.length)
-        Integer prev = null;
-        // create and remove n - 1 multiples
-        for (int i = 1; i < n; ) {
+        int prev = 0;
+        // create and remove n multiples
+        for (int i = 0; i < n; ) {
             // remove is O(1)
             final Val base = queue.remove();
-            if (prev == null || base.value != prev) {
+            if (base.value != prev) {
                 prev = base.value;
                 i++;
             }
@@ -54,6 +54,6 @@ public class NSmallestMultiple {
             queue.add(base);
         }
         // remove n-th
-        return queue.remove().value;
+        return prev;
     }
 }
