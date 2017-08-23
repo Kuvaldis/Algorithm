@@ -229,14 +229,4 @@ public class SkipListSet {
     private boolean flipCoin() {
         return ThreadLocalRandom.current().nextBoolean();
     }
-
-    private static class FindPredecessorResult {
-        private int position;
-        private final Node[] predecessors;
-
-        public FindPredecessorResult(final int position, final Node[] predecessors) {
-            this.position = position;
-            this.predecessors = predecessors;
-        }
-    }
 }
