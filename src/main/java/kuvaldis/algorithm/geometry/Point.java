@@ -2,19 +2,19 @@ package kuvaldis.algorithm.geometry;
 
 public class Point {
 
-    private final double x;
-    private final double y;
+    private final int x;
+    private final int y;
 
-    public Point(final double x, final double y) {
+    public Point(final int x, final int y) {
         this.x = x;
         this.y = y;
     }
 
-    public double getX() {
+    public int getX() {
         return x;
     }
 
-    public double getY() {
+    public int getY() {
         return y;
     }
 }
