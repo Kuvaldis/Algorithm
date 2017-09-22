@@ -9,6 +9,8 @@ import java.util.stream.Stream;
  */
 public class AStar {
 
+    private final FComparator F_COMPARATOR = new FComparator();
+
     /**
      * First index is row numbers, second is for column.
      */
@@ -18,20 +20,23 @@ public class AStar {
         this.cells = cells;
     }
 
-    public void buildPath() {
-        // first, find coordinate of start and end
+    public List<Coordinates> buildPath() {
+        // preparation part
         Coordinates start = null;
         Coordinates end = null;
-
+        final Set<Coordinates> closedCells = new HashSet<>();
         for (int rowNumber = 0; rowNumber < cells.length; rowNumber++) {
             final Cell[] cellRow = cells[rowNumber];
             for (int columnNumber = 0; columnNumber < cellRow.length; columnNumber++) {
                 final Cell cell = cellRow[columnNumber];
                 if (cell.start) {
-                    start = new Coordinates(rowNumber, columnNumber);
+                    start = new Coordinates(cells, rowNumber, columnNumber);
                 }
                 if (cell.end) {
-                    end = new Coordinates(rowNumber, columnNumber);
+                    end = new Coordinates(cells, rowNumber, columnNumber);
+                }
+                if (cell.obstacle) {
+                    closedCells.add(new Coordinates(cells, rowNumber, columnNumber));
                 }
             }
         }
@@ -41,27 +46,90 @@ public class AStar {
         if (end == null || !end.isValid()) {
             throw new IllegalArgumentException("Could not find end");
         }
+        start.getCell().g = 0;
 
         // the main part
-        // todo simple set should be enough and better
-        final Queue<Coordinates> openCellsQueue = new PriorityQueue<>(new HComparator());
-        final Set<Coordinates> closedCells = new HashSet<>();
-        // todo add all obstacles here and remove check
-        openCellsQueue.add(start);
-        while (!openCellsQueue.isEmpty()) {
-            final Coordinates c = openCellsQueue.poll();
+        final Set<Coordinates> openCells = new HashSet<>();
+        openCells.add(start);
+        while (!openCells.isEmpty()) {
+            final Coordinates c = Collections.min(openCells, F_COMPARATOR);
+            if (c.equals(end)) {
+                break;
+            }
             final List<Coordinates> candidates = c.neighbours()
                     .filter(n -> !n.isObstacle())
+                    .filter(n -> !openCells.contains(n))
+                    .filter(n -> !closedCells.contains(n))
+                    .filter(n -> !obstacleOnPath(c, n))
                     .collect(Collectors.toList());
             for (Coordinates candidate : candidates) {
-                candidate.getCell().parent = c;
+                if (candidate.getCell().parent == null) {
+                    candidate.getCell().parent = c;
+                }
+                if (candidate.getCell().h == null) {
+                    candidate.getCell().h = calculateManhattanDistance(candidate, end);
+                }
+                final Integer neighbourDistance = calculateNeighboursDistance(c, candidate);
+                if (candidate.getCell().g == null || candidate.getCell().g > c.getCell().g + neighbourDistance) {
+                    candidate.getCell().g = c.getCell().g + neighbourDistance;
+                    candidate.getCell().parent = c;
+                }
+                openCells.add(candidate);
             }
-            // todo
+            openCells.remove(c);
+            closedCells.add(c);
         }
 
+        // no path found
+        if (end.getCell().parent == null) {
+            return Collections.emptyList();
+        }
+
+        // restore path
+        final LinkedList<Coordinates> result = new LinkedList<>();
+        Coordinates current = end;
+        while (!current.equals(start)) {
+            result.push(current);
+            current = current.getCell().parent;
+        }
+        result.push(current);
+        return result;
     }
 
-    public static class Cell implements Comparable<Cell> {
+    private boolean obstacleOnPath(final Coordinates from, final Coordinates to) {
+        final int coordinateDistance = calculateCoordinateDistance(from, to);
+        if (coordinateDistance == 1) {
+            return false;
+        }
+        if (coordinateDistance == 2) {
+            return cells[from.rowNumber][to.columnNumber].obstacle ||
+                    cells[to.rowNumber][from.columnNumber].obstacle;
+        }
+
+        throw new IllegalArgumentException("You are doing something wrong!");
+    }
+
+    private Integer calculateManhattanDistance(final Coordinates from, final Coordinates to) {
+        return 10 * calculateCoordinateDistance(from, to);
+    }
+
+    private Integer calculateNeighboursDistance(final Coordinates from, final Coordinates to) {
+        final int coordinateDistance = calculateCoordinateDistance(from, to);
+        switch (coordinateDistance) {
+            case 1:
+                return 10;
+            case 2:
+                return 14;
+            default:
+                throw new IllegalArgumentException("You are doing something wrong!");
+        }
+    }
+
+    private int calculateCoordinateDistance(final Coordinates from, final Coordinates to) {
+        return Math.abs(from.rowNumber - to.rowNumber) + Math.abs(from.columnNumber - to.columnNumber);
+    }
+
+    public static class Cell {
 
         private final boolean start;
 
@@ -88,25 +156,18 @@ public class AStar {
             this.end = end;
             this.obstacle = obstacle;
         }
-
-        /**
-         * Compares by h value
-         */
-        @Override
-        public int compareTo(final Cell o) {
-            final int thisF = this.g + this.h;
-            final int oF = o.g + o.h;
-            return thisF - oF;
-        }
     }
 
-    private class Coordinates {
+    public static class Coordinates {
+
+        private final Cell[][] cells;
 
         private final int rowNumber;
 
         private final int columnNumber;
 
-        private Coordinates(final int rowNumber, final int columnNumber) {
+        private Coordinates(final Cell[][] cells, final int rowNumber, final int columnNumber) {
+            this.cells = cells;
             this.rowNumber = rowNumber;
             this.columnNumber = columnNumber;
         }
@@ -122,15 +183,15 @@ public class AStar {
 
         public Stream<Coordinates> neighbours() {
             return Stream.of(
-                    new Coordinates(rowNumber - 1, columnNumber - 1),
-                    new Coordinates(rowNumber - 1, columnNumber),
-                    new Coordinates(rowNumber - 1, columnNumber + 1),
-                    new Coordinates(rowNumber, columnNumber - 1),
-                    new Coordinates(rowNumber, columnNumber),
-                    new Coordinates(rowNumber, columnNumber + 1),
-                    new Coordinates(rowNumber + 1, columnNumber - 1),
-                    new Coordinates(rowNumber + 1, columnNumber),
-                    new Coordinates(rowNumber + 1, columnNumber + 1))
+                    new Coordinates(cells, rowNumber - 1, columnNumber - 1),
+                    new Coordinates(cells, rowNumber - 1, columnNumber),
+                    new Coordinates(cells, rowNumber - 1, columnNumber + 1),
+                    new Coordinates(cells, rowNumber, columnNumber - 1),
+                    new Coordinates(cells, rowNumber, columnNumber),
+                    new Coordinates(cells, rowNumber, columnNumber + 1),
+                    new Coordinates(cells, rowNumber + 1, columnNumber - 1),
+                    new Coordinates(cells, rowNumber + 1, columnNumber),
+                    new Coordinates(cells, rowNumber + 1, columnNumber + 1))
                     .filter(Coordinates::isValid);
         }
 
@@ -155,15 +216,22 @@ public class AStar {
             result = 31 * result + columnNumber;
             return result;
         }
+
+        @Override
+        public String toString() {
+            return String.format("[%s, %s]", rowNumber, columnNumber);
+        }
     }
 
-    private class HComparator implements Comparator<Coordinates> {
+    private class FComparator implements Comparator<Coordinates> {
 
         @Override
         public int compare(final Coordinates o1, final Coordinates o2) {
             final Cell c1 = cells[o1.rowNumber][o1.columnNumber];
             final Cell c2 = cells[o2.rowNumber][o2.columnNumber];
-            return c1.compareTo(c2);
+            final int c1f = c1.g + c1.h;
+            final int c2f = c2.g + c2.h;
+            return c1f - c2f;
         }
     }
 
