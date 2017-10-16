@@ -32,8 +32,7 @@ public class BranchNode extends Node{
         if (children.size() < maxEntries) {
             return null;
         } else {
-            // todo split
-            return new Node[2];
+            return split(p);
         }
     }
 
@@ -58,5 +57,10 @@ public class BranchNode extends Node{
             }
         }
         return bestFitIndex;
+    }
+
+    private Node[] split(final Point p) {
+        // todo implement
+        return new Node[0];
     }
 }
