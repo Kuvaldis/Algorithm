@@ -13,7 +13,7 @@ public class LeafNode extends Node {
     }
 
     @Override
-    public Node add(final Point p) {
+    public Node[] insert(final Point p) {
         if (entries.size() < maxEntries) {
             getArea().adjustBounds(p);
             entries.add(p);

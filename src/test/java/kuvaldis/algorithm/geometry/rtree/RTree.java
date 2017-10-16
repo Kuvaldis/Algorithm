@@ -26,10 +26,11 @@ public class RTree {
         if (root == null) {
             root = new LeafNode(maxEntries, minEntries);
         }
-        final Node newRoot = root.add(p);
-        if (newRoot != null) {
-            // root was split on two nodes
-            root = newRoot;
+        final Node[] insertResult = root.insert(p);
+        if (insertResult == null) {
+            return;
         }
+
+        root = new BranchNode(maxEntries, minEntries, insertResult);
     }
 }

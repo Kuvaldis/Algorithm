@@ -15,9 +15,9 @@ abstract class Node {
     }
 
     /**
-     * @return null if no split happened, otherwise a non-null new node. The principle is the same as for B-tree
+     * @return null if no split happened, otherwise two nodes. The principle is the same as for B-tree
      */
-    public abstract Node add(final Point p);
+    public abstract Node[] insert(final Point p);
 
     Area getArea() {
         return this.area;
