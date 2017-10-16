@@ -21,6 +21,16 @@ class Area {
         }
     }
 
+    void adjustBounds(final Area area) {
+        if (isEmpty()) {
+            this.topLeft = area.topLeft;
+            this.bottomRight = area.bottomRight;
+        } else {
+            this.topLeft = calculateAdjustedTopLeft(area.topLeft);
+            this.bottomRight = calculateAdjustedBottomRight(area.bottomRight);
+        }
+    }
+
     boolean contains(final Point p) {
         if (isEmpty()) {
             return false;

@@ -1,5 +1,7 @@
 package kuvaldis.algorithm.geometry.rtree;
 
+import java.util.Arrays;
+
 /**
  * https://en.wikipedia.org/wiki/R-tree (rus)
  */
@@ -31,6 +33,9 @@ public class RTree {
             return;
         }
 
-        root = new BranchNode(maxEntries, minEntries, insertResult);
+        final BranchNode newRoot = new BranchNode(maxEntries, minEntries);
+        newRoot.insertChild(insertResult[0]);
+        newRoot.insertChild(insertResult[1]);
+        root = newRoot;
     }
 }

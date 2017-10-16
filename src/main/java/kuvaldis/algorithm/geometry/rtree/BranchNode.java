@@ -8,10 +8,9 @@ public class BranchNode extends Node{
 
     private final List<Node> children;
 
-    BranchNode(final int maxEntries, final int minEntries, final Node[] insertResult) {
+    BranchNode(final int maxEntries, final int minEntries) {
         super(maxEntries, minEntries);
-        children = new ArrayList<>(maxEntries);
-        children.addAll(Arrays.asList(insertResult));
+        this.children = new ArrayList<>(maxEntries);
     }
 
     @Override
@@ -57,6 +56,11 @@ public class BranchNode extends Node{
             }
         }
         return bestFitIndex;
+    }
+
+    void insertChild(final Node node) {
+        children.add(node);
+        this.getArea().adjustBounds(node.getArea());
     }
 
     private Node[] split(final Point p) {
