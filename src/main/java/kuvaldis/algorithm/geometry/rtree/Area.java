@@ -2,32 +2,32 @@ package kuvaldis.algorithm.geometry.rtree;
 
 class Area {
 
-    private Point topLeft;
+    private Point bottomLeft;
 
-    private Point bottomRight;
+    private Point topRight;
 
-    Area(final Point topLeft, final Point bottomRight) {
-        this.topLeft = topLeft;
-        this.bottomRight = bottomRight;
+    Area(final Point bottomLeft, final Point topRight) {
+        this.bottomLeft = bottomLeft;
+        this.topRight = topRight;
     }
 
-    void adjustBounds(final Point p) {
+    void adjustBorders(final Point p) {
         if (isEmpty()) {
-            this.topLeft = p;
-            this.bottomRight = p;
+            this.bottomLeft = p;
+            this.topRight = p;
         } else {
-            this.topLeft = calculateAdjustedTopLeft(p);
-            this.bottomRight = calculateAdjustedBottomRight(p);
+            this.bottomLeft = calculateAdjustedBottomLeft(p);
+            this.topRight = calculateAdjustedTopRight(p);
         }
     }
 
-    void adjustBounds(final Area area) {
+    void adjustBorders(final Area area) {
         if (isEmpty()) {
-            this.topLeft = area.topLeft;
-            this.bottomRight = area.bottomRight;
+            this.bottomLeft = area.bottomLeft;
+            this.topRight = area.topRight;
         } else {
-            this.topLeft = calculateAdjustedTopLeft(area.topLeft);
-            this.bottomRight = calculateAdjustedBottomRight(area.bottomRight);
+            this.bottomLeft = calculateAdjustedBottomLeft(area.bottomLeft);
+            this.topRight = calculateAdjustedTopRight(area.topRight);
         }
     }
 
@@ -35,35 +35,61 @@ class Area {
         if (isEmpty()) {
             return false;
         }
-        return topLeft.getX() <= p.getX() && p.getX() <= bottomRight.getX() &&
-                bottomRight.getY() <= p.getY() && p.getY() <= topLeft.getY();
+        return bottomLeft.getX() <= p.getX() && p.getX() <= topRight.getX() &&
+                bottomLeft.getY() <= p.getY() && p.getY() <= topRight.getY();
     }
 
     long calculateGrowAreaSize(final Point p) {
         if (isEmpty()) {
             return 0L;
         }
-        final Point growTopLeft = calculateAdjustedTopLeft(p);
-        final Point growBottomRight = calculateAdjustedBottomRight(p);
-        final Area growArea = new Area(growTopLeft, growBottomRight);
+        final Point growBottomLeft = calculateAdjustedBottomLeft(p);
+        final Point growTopRight = calculateAdjustedTopRight(p);
+        final Area growArea = new Area(growBottomLeft, growTopRight);
         return growArea.area() - this.area();
     }
 
+    long calculateGrowAreaSize(final Area area) {
+        if (isEmpty()) {
+            return area.area();
+        }
+        final Point growBottomLeft = calculateAdjustedBottomLeft(area.getBottomLeft());
+        final Point growTopRight = calculateAdjustedTopRight(area.getTopRight());
+        final Area growArea = new Area(growBottomLeft, growTopRight);
+        return growArea.area() - this.area();
+    }
+
+    Point getBottomLeft() {
+        return bottomLeft;
+    }
+
+    Point getTopRight() {
+        return topRight;
+    }
+
+    int getXWidth() {
+        return topRight.getX() - bottomLeft.getX();
+    }
+
+    int getYWidth() {
+        return topRight.getY() - bottomLeft.getY();
+    }
+
     private long area() {
-        final long length = bottomRight.getX() - topLeft.getX();
-        final long height = topLeft.getY() - bottomRight.getY();
+        final long length = topRight.getX() - bottomLeft.getX();
+        final long height = topRight.getY() - bottomLeft.getY();
         return length * height;
     }
 
-    private Point calculateAdjustedTopLeft(final Point p) {
-        return new Point(Math.min(topLeft.getX(), p.getX()), Math.max(topLeft.getY(), p.getY()));
+    private Point calculateAdjustedBottomLeft(final Point p) {
+        return new Point(Math.min(bottomLeft.getX(), p.getX()), Math.min(bottomLeft.getY(), p.getY()));
     }
 
-    private Point calculateAdjustedBottomRight(final Point p) {
-        return new Point(Math.max(bottomRight.getX(), p.getX()), Math.min(bottomRight.getY(), p.getY()));
+    private Point calculateAdjustedTopRight(final Point p) {
+        return new Point(Math.max(topRight.getX(), p.getX()), Math.max(topRight.getY(), p.getY()));
     }
 
     private boolean isEmpty() {
-        return topLeft == null || bottomRight == null;
+        return bottomLeft == null || topRight == null;
     }
 }

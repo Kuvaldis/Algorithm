@@ -14,16 +14,16 @@ public class LeafNode extends Node {
 
     @Override
     public Node[] insert(final Point p) {
+        getArea().adjustBorders(p);
+        entries.add(p);
         if (entries.size() < maxEntries) {
-            getArea().adjustBounds(p);
-            entries.add(p);
             return null;
         } else {
-            return split(p);
+            return split();
         }
     }
 
-    private Node[] split(final Point p) {
+    private Node[] split() {
 
         final LeafNode firstNode = new LeafNode(maxEntries, minEntries);
         final LeafNode secondNode = new LeafNode(maxEntries, minEntries);
@@ -48,7 +48,7 @@ public class LeafNode extends Node {
             }
         }
 
-        // The rest is quite the same as for general case
+        // The rest is quite the same as for general (branch node) case
 
         if (leftmostIndex == rightmostIndex) {
             // for some reason they are the same. Just grab first and last as the base for new leaf nodes
@@ -59,22 +59,30 @@ public class LeafNode extends Node {
         firstNode.insert(entries.get(leftmostIndex));
         secondNode.insert(entries.get(rightmostIndex));
 
+        // again, the same as for branch node
+
+        final boolean addToFirst = entries.size() - 2 <= minEntries - 1;
+
         for (int i = 0; i < entries.size(); i++) {
             final Point entry = entries.get(i);
             if (i == leftmostIndex || i == rightmostIndex) {
                 continue;
             }
-            insertOptimally(firstNode, secondNode, entry);
-
+            if (addToFirst) {
+                firstNode.insert(entry);
+            } else if (firstNode.entries.size() == maxEntries) {
+                secondNode.insert(entry);
+            } else if (secondNode.entries.size() == maxEntries) {
+                firstNode.insert(entry);
+            } else {
+                insertPointOptimally(firstNode, secondNode, entry);
+            }
         }
-
-        // don't forget the one which causes all this stuff
-        insertOptimally(firstNode, secondNode, p);
 
         return new Node[]{firstNode, secondNode};
     }
 
-    private void insertOptimally(final LeafNode firstNode, final LeafNode secondNode, final Point p) {
+    private void insertPointOptimally(final LeafNode firstNode, final LeafNode secondNode, final Point p) {
         // insert other points the way that area grows minimally.
         // That is, if first node area grows less than second the value should be added there.
         // Otherwise, into the second
