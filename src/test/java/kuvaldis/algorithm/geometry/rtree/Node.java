@@ -11,7 +11,7 @@ abstract class Node {
     Node(final int maxEntries, final int minEntries) {
         this.maxEntries = maxEntries;
         this.minEntries = minEntries;
-        this.area = new Area();
+        this.area = new Area(null, null);
     }
 
     /**

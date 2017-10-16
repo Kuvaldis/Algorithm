@@ -11,21 +11,28 @@ class Area {
         this.bottomRight = bottomRight;
     }
 
-    public boolean isEmpty() {
-        return topLeft == null || bottomRight == null;
-    }
-
     void adjustBounds(final Point p) {
-        this.topLeft = calculateAdjustedTopLeft(p);
-        this.bottomRight = calculateAdjustedBottomRight(p);
+        if (isEmpty()) {
+            this.topLeft = p;
+            this.bottomRight = p;
+        } else {
+            this.topLeft = calculateAdjustedTopLeft(p);
+            this.bottomRight = calculateAdjustedBottomRight(p);
+        }
     }
 
     boolean contains(final Point p) {
+        if (isEmpty()) {
+            return false;
+        }
         return topLeft.getX() <= p.getX() && p.getX() <= bottomRight.getX() &&
                 bottomRight.getY() <= p.getY() && p.getY() <= topLeft.getY();
     }
 
     long calculateGrowAreaSize(final Point p) {
+        if (isEmpty()) {
+            return 0L;
+        }
         final Point growTopLeft = calculateAdjustedTopLeft(p);
         final Point growBottomRight = calculateAdjustedBottomRight(p);
         final Area growArea = new Area(growTopLeft, growBottomRight);
@@ -44,5 +51,9 @@ class Area {
 
     private Point calculateAdjustedBottomRight(final Point p) {
         return new Point(Math.max(bottomRight.getX(), p.getX()), Math.min(bottomRight.getY(), p.getY()));
+    }
+
+    private boolean isEmpty() {
+        return topLeft == null || bottomRight == null;
     }
 }
