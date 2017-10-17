@@ -29,7 +29,7 @@ public class BranchNode extends Node {
         children.remove(bestFitIndex);
         children.addAll(bestFitIndex, Arrays.asList(insertResult));
         // no need to adjust borders, it was done before
-        if (children.size() < maxEntries) {
+        if (children.size() <= maxEntries) {
             return null;
         } else {
             return split();

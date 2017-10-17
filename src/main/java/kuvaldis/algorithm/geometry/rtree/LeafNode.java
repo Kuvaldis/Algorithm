@@ -16,7 +16,7 @@ public class LeafNode extends Node {
     public Node[] insert(final Point p) {
         getArea().adjustBorders(p);
         entries.add(p);
-        if (entries.size() < maxEntries) {
+        if (entries.size() <= maxEntries) {
             return null;
         } else {
             return split();
