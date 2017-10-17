@@ -1,5 +1,7 @@
 package kuvaldis.algorithm.geometry.rtree;
 
+import java.util.function.Consumer;
+
 abstract class Node {
 
     final int maxEntries;
@@ -22,4 +24,6 @@ abstract class Node {
     Area getArea() {
         return this.area;
     }
+
+    public abstract void search(final Area area, final Consumer<Point> consumer);
 }

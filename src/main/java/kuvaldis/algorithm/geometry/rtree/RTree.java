@@ -1,5 +1,10 @@
 package kuvaldis.algorithm.geometry.rtree;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Consumer;
+
 /**
  * https://en.wikipedia.org/wiki/R-tree (rus)
  */
@@ -34,5 +39,15 @@ public class RTree {
         final BranchNode newRoot = new BranchNode(maxEntries, minEntries);
         newRoot.insertChildren(0, insertResult);
         root = newRoot;
+    }
+
+    public List<Point> search(final Area area) {
+        if (root == null) {
+            return Collections.emptyList();
+        }
+        final List<Point> result = new ArrayList<>();
+        final Consumer<Point> consumer = result::add;
+        root.search(area, consumer);
+        return result;
     }
 }

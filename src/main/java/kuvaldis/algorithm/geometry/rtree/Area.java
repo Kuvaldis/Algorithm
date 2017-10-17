@@ -39,6 +39,21 @@ class Area {
                 bottomLeft.getY() <= p.getY() && p.getY() <= topRight.getY();
     }
 
+    boolean intersects(final Area area) {
+        if (isEmpty()) {
+            return false;
+        }
+
+        if (this.bottomLeft.getX() > area.topRight.getX() ||
+                this.topRight.getX() < area.bottomLeft.getX() ||
+                this.bottomLeft.getY() > area.topRight.getY() ||
+                this.topRight.getY() < area.bottomLeft.getY()) {
+            return false;
+        }
+
+        return true;
+    }
+
     long calculateGrowAreaSize(final Point p) {
         if (isEmpty()) {
             return 0L;

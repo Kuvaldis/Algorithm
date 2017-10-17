@@ -3,6 +3,7 @@ package kuvaldis.algorithm.geometry.rtree;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class BranchNode extends Node {
 
@@ -34,6 +35,13 @@ public class BranchNode extends Node {
         } else {
             return split();
         }
+    }
+
+    @Override
+    public void search(final Area area, final Consumer<Point> consumer) {
+        children.stream()
+                .filter(c -> area.intersects(c.getArea()))
+                .forEach(c -> c.search(area, consumer));
     }
 
     private int chooseLeaf(final Point p) {

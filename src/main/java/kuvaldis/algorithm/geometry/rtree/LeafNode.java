@@ -2,6 +2,7 @@ package kuvaldis.algorithm.geometry.rtree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class LeafNode extends Node {
 
@@ -21,6 +22,13 @@ public class LeafNode extends Node {
         } else {
             return split();
         }
+    }
+
+    @Override
+    public void search(final Area area, final Consumer<Point> consumer) {
+        entries.stream()
+                .filter(area::contains)
+                .forEach(consumer);
     }
 
     private Node[] split() {
