@@ -66,7 +66,9 @@ public class Segment {
          */
         // We can find product of vectors p1p3 and p1p2, and p1p4 and p1p2.
         // If the results have the same sign, it means that p1p3 and p1p4 are on the same side of the plane.
-        // In other words (p1p3*p1p2)*(p1p4*p1p2) <= 0.
+        // In other words, (p1p3*p1p2)*(p1p4*p1p2) <= 0 is true only when p1p3 and p1p4 are on the different sides of
+        // plane created by extension of p1p2.
+        // On the picture above p1p3 is not on the same side as p1p4, so the result of (p1p3*p1p2)*(p1p4*p1p2) is less than 0
         // In case the result is 0 it means that one of the points either p3 or p4 lie on the segment p1p2,
         // which is considered to be an intersection.
         // The same should be calculated for the second case.
