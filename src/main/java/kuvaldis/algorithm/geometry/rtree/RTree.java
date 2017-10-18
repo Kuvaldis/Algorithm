@@ -50,4 +50,6 @@ public class RTree {
         root.search(area, consumer);
         return result;
     }
+
+    // here should be delete method, but it is pretty similar to B-Tree
 }
