@@ -1,5 +1,8 @@
 package kuvaldis.algorithm.geometry.rtree;
 
+import kuvaldis.algorithm.geometry.SquareArea;
+import kuvaldis.algorithm.geometry.Point;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +44,7 @@ public class RTree {
         root = newRoot;
     }
 
-    public List<Point> search(final Area area) {
+    public List<Point> search(final SquareArea area) {
         if (root == null) {
             return Collections.emptyList();
         }

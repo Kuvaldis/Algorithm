@@ -1,5 +1,8 @@
 package kuvaldis.algorithm.geometry.rtree;
 
+import kuvaldis.algorithm.geometry.SquareArea;
+import kuvaldis.algorithm.geometry.Point;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +41,7 @@ public class BranchNode extends Node {
     }
 
     @Override
-    public void search(final Area area, final Consumer<Point> consumer) {
+    public void search(final SquareArea area, final Consumer<Point> consumer) {
         children.stream()
                 .filter(c -> area.intersects(c.getArea()))
                 .forEach(c -> c.search(area, consumer));

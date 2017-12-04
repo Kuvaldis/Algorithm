@@ -1,5 +1,8 @@
 package kuvaldis.algorithm.geometry.rtree;
 
+import kuvaldis.algorithm.geometry.SquareArea;
+import kuvaldis.algorithm.geometry.Point;
+
 import java.util.function.Consumer;
 
 abstract class Node {
@@ -8,12 +11,12 @@ abstract class Node {
 
     final int minEntries;
 
-    private final Area area;
+    private final RTreeArea area;
 
     Node(final int maxEntries, final int minEntries) {
         this.maxEntries = maxEntries;
         this.minEntries = minEntries;
-        this.area = new Area(null, null);
+        this.area = new RTreeArea(null, null);
     }
 
     /**
@@ -21,9 +24,9 @@ abstract class Node {
      */
     public abstract Node[] insert(final Point p);
 
-    Area getArea() {
+    RTreeArea getArea() {
         return this.area;
     }
 
-    public abstract void search(final Area area, final Consumer<Point> consumer);
+    public abstract void search(final SquareArea area, final Consumer<Point> consumer);
 }

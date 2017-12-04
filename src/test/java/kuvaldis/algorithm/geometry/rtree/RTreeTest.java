@@ -1,9 +1,10 @@
 package kuvaldis.algorithm.geometry.rtree;
 
+import kuvaldis.algorithm.geometry.SquareArea;
+import kuvaldis.algorithm.geometry.Point;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -35,7 +36,7 @@ public class RTreeTest {
         rTree.add(new Point(2, 8));
 
         // then
-        final List<Point> nonEmptyResult = rTree.search(new Area(new Point(4, 3), new Point(9, 7)));
+        final List<Point> nonEmptyResult = rTree.search(new SquareArea(new Point(4, 3), new Point(9, 7)));
         assertThat(nonEmptyResult, Matchers.containsInAnyOrder(
                 new Point(4, 5),
                 new Point(4, 6),
@@ -46,7 +47,7 @@ public class RTreeTest {
         ));
 
         // and
-        final List<Point> emptyResult = rTree.search(new Area(new Point(7, 7), new Point(8, 8)));
+        final List<Point> emptyResult = rTree.search(new SquareArea(new Point(7, 7), new Point(8, 8)));
         assertTrue(emptyResult.isEmpty());
     }
 }

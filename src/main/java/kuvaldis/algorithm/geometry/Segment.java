@@ -102,4 +102,25 @@ public class Segment {
 
         return true;
     }
+
+    public boolean contains(final Point point) {
+        // 1. Check the point within frame
+        final SegmentFrame segmentFrame = new SegmentFrame(this);
+        if (!segmentFrame.contains(point)) {
+            return false;
+        }
+
+        // 2. Point is within the segment frame. With vector multiplication we can figure if a point lays on the segment.
+        // p0 - our point
+        // p1 - segment start
+        // p2 - segment end
+        // if p0p1 * p0p2 == 0, then the point is on the line.
+        final Vector v1 = new Vector(point, getP1());
+        final Vector v2 = new Vector(point, getP2());
+        if (v1.multiply(v2) != 0) {
+            return false;
+        }
+
+        return true;
+    }
 }

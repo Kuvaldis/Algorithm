@@ -8,12 +8,11 @@ package kuvaldis.algorithm.geometry;
         |/            |                                          |            \|
       p1.-------------                                            -------------.p2
 */
-public class SegmentFrame {
-
-    private final Segment segment;
+public class SegmentFrame extends SquareArea {
 
     public SegmentFrame(final Segment segment) {
-        this.segment = segment;
+        super(resolveFrameBottomLeftPoint(segment),
+                resolveFrameTopRightPoint(segment));
     }
 
     // Now, there are several cases, when it's guaranteed that frames do not intersect,
@@ -42,10 +41,10 @@ public class SegmentFrame {
     public boolean hasIntersectionWith(final SegmentFrame f2) {
         final SegmentFrame f1 = this;
         // First, we find bottom-left and top-right points for the frames
-        final Point bottomLeft1 = resolveFrameBottomLeftPoint(f1.segment);
-        final Point topRight1 = resolveFrameTopRightPoint(f1.segment);
-        final Point bottomLeft2 = resolveFrameBottomLeftPoint(f2.segment);
-        final Point topRight2 = resolveFrameTopRightPoint(f2.segment);
+        final Point bottomLeft1 = f1.getBottomLeft();
+        final Point topRight1 = f1.getTopRight();
+        final Point bottomLeft2 = f2.getBottomLeft();
+        final Point topRight2 = f2.getTopRight();
 
         if (topRight1.getX() < bottomLeft2.getX() ||
                 topRight2.getX() < bottomLeft1.getX() ||
@@ -57,12 +56,12 @@ public class SegmentFrame {
         return true;
     }
 
-    private Point resolveFrameBottomLeftPoint(final Segment segment) {
+    private static Point resolveFrameBottomLeftPoint(final Segment segment) {
         return new Point(Math.min(segment.getP1().getX(), segment.getP2().getX()),
                 Math.min(segment.getP1().getY(), segment.getP2().getY()));
     }
 
-    private Point resolveFrameTopRightPoint(final Segment segment) {
+    private static Point resolveFrameTopRightPoint(final Segment segment) {
         return new Point(Math.max(segment.getP1().getX(), segment.getP2().getX()),
                 Math.max(segment.getP1().getY(), segment.getP2().getY()));
     }

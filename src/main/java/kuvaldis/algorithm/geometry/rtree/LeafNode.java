@@ -1,5 +1,8 @@
 package kuvaldis.algorithm.geometry.rtree;
 
+import kuvaldis.algorithm.geometry.SquareArea;
+import kuvaldis.algorithm.geometry.Point;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -25,7 +28,7 @@ public class LeafNode extends Node {
     }
 
     @Override
-    public void search(final Area area, final Consumer<Point> consumer) {
+    public void search(final SquareArea area, final Consumer<Point> consumer) {
         entries.stream()
                 .filter(area::contains)
                 .forEach(consumer);
