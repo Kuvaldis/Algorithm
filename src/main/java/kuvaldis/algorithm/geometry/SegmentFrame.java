@@ -11,8 +11,7 @@ package kuvaldis.algorithm.geometry;
 public class SegmentFrame extends SquareArea {
 
     public SegmentFrame(final Segment segment) {
-        super(resolveFrameBottomLeftPoint(segment),
-                resolveFrameTopRightPoint(segment));
+        super(segment.bottomLeft(), segment.topRight());
     }
 
     // Now, there are several cases, when it's guaranteed that frames do not intersect,
@@ -54,15 +53,5 @@ public class SegmentFrame extends SquareArea {
         }
 
         return true;
-    }
-
-    private static Point resolveFrameBottomLeftPoint(final Segment segment) {
-        return new Point(Math.min(segment.getP1().getX(), segment.getP2().getX()),
-                Math.min(segment.getP1().getY(), segment.getP2().getY()));
-    }
-
-    private static Point resolveFrameTopRightPoint(final Segment segment) {
-        return new Point(Math.max(segment.getP1().getX(), segment.getP2().getX()),
-                Math.max(segment.getP1().getY(), segment.getP2().getY()));
     }
 }

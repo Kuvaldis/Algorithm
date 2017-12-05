@@ -123,4 +123,16 @@ public class Segment {
 
         return true;
     }
+
+    public Point bottomLeft() {
+        return new Point(Math.min(p1.getX(), p2.getX()),
+                Math.min(p1.getY(), p2.getY()));
+    }
+
+    public Point topRight() {
+        return new Point(Math.max(p1.getX(), p2.getX()),
+                Math.max(p1.getY(), p2.getY()));
+    }
+
+
 }

@@ -1,6 +1,6 @@
 package kuvaldis.algorithm.geometry;
 
-public class Point {
+public class Point implements Comparable<Point> {
 
     private final int x;
 
@@ -40,5 +40,14 @@ public class Point {
     @Override
     public String toString() {
         return String.format("(%s,%s)", x, y);
+    }
+
+    @Override
+    public int compareTo(final Point point) {
+        final int compareX = this.getX() - point.getX();
+        if (compareX != 0) {
+            return compareX;
+        }
+        return this.getY() - point.getY();
     }
 }
