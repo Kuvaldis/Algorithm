@@ -125,14 +125,14 @@ public class Segment {
     }
 
     public Point leftEnd() {
-        if (p1.compareTo(p2) <= 0) {
+        if (p1.getX() <= p2.getX()) {
             return p1;
         }
         return p2;
     }
 
     public Point rightEnd() {
-        if (p2.compareTo(p1) >= 0) {
+        if (p2.getX() >= p1.getX()) {
             return p2;
         }
         return p1;
