@@ -2,9 +2,6 @@ package kuvaldis.algorithm.graph.weighted;
 
 import kuvaldis.algorithm.graph.weighted.domain.WeightedGraph;
 import kuvaldis.algorithm.graph.weighted.domain.WeightedVertex;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
 
 import java.util.*;
 
@@ -12,14 +9,28 @@ public class AllMinimalPathsFloydWarshall {
 
     private final WeightedGraph graph;
 
-    @Data
     public static class Result {
-        @Getter(AccessLevel.PRIVATE)
         private final WeightedGraph graph;
-        @Getter(AccessLevel.PRIVATE)
         private final Map<WeightedVertex, Map<WeightedVertex, Integer>> minimalPathDistances;
-        @Getter(AccessLevel.PRIVATE)
         private final Map<WeightedVertex, Map<WeightedVertex, WeightedVertex>> parents;
+
+        public Result(final WeightedGraph graph, final Map<WeightedVertex, Map<WeightedVertex, Integer>> minimalPathDistances, final Map<WeightedVertex, Map<WeightedVertex, WeightedVertex>> parents) {
+            this.graph = graph;
+            this.minimalPathDistances = minimalPathDistances;
+            this.parents = parents;
+        }
+
+        public WeightedGraph getGraph() {
+            return graph;
+        }
+
+        public Map<WeightedVertex, Map<WeightedVertex, Integer>> getMinimalPathDistances() {
+            return minimalPathDistances;
+        }
+
+        public Map<WeightedVertex, Map<WeightedVertex, WeightedVertex>> getParents() {
+            return parents;
+        }
 
         public List<WeightedVertex> minimalPath(final Integer from, final Integer to) {
             final WeightedVertex fromVertex = graph.getVertex(from);

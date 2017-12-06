@@ -1,10 +1,6 @@
 package kuvaldis.algorithm.backtracking.sudoku;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.lang.System.lineSeparator;
@@ -15,7 +11,6 @@ public class Board {
     public static final int SIZE = 9;
     public static final int SQUARE_SIZE = 3;
 
-    @Getter(AccessLevel.PUBLIC)
     private final Set<Cell> emptyCells = new HashSet<>();
 
     private final Map<Cell, Integer> values = new HashMap<>();
@@ -48,5 +43,9 @@ public class Board {
                         .mapToObj(x -> Optional.ofNullable(getCellValue(x, y)).map(Object::toString).orElse("*"))
                         .collect(joining(" ")))
                 .collect(joining(lineSeparator()));
+    }
+
+    public Set<Cell> getEmptyCells() {
+        return emptyCells;
     }
 }

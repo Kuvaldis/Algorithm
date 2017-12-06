@@ -1,5 +1,7 @@
 package kuvaldis.algorithm.dynamic.string;
 
+import java.util.Comparator;
+
 import static java.util.Arrays.asList;
 import static kuvaldis.algorithm.dynamic.string.Action.*;
 
@@ -50,7 +52,7 @@ public abstract class AbstractStringCompare {
                 final ActionData delete = new ActionData(matrix[i - 1][j].getCost().add(delete(sc)), DELETE, sc);
                 // choose cheapest action
                 matrix[i][j] = asList(substituteOrNone, insert, delete).stream()
-                        .min((o1, o2) -> o1.getCost().compareTo(o2.getCost()))
+                        .min(Comparator.comparing(ActionData::getCost))
                         .get();
 
             }

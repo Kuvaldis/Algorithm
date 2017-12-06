@@ -1,10 +1,7 @@
 package kuvaldis.algorithm.dynamic;
 
-import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
@@ -14,11 +11,28 @@ import static java.util.stream.Collectors.toList;
  */
 class NonPermutationMinimumSumDifferencePartition {
 
-    @Data
     public class Partition {
         private final int startInclusive;
         private final int endInclusive;
         private final List<Integer> values;
+
+        public Partition(final int startInclusive, final int endInclusive, final List<Integer> values) {
+            this.startInclusive = startInclusive;
+            this.endInclusive = endInclusive;
+            this.values = values;
+        }
+
+        public int getStartInclusive() {
+            return startInclusive;
+        }
+
+        public int getEndInclusive() {
+            return endInclusive;
+        }
+
+        public List<Integer> getValues() {
+            return values;
+        }
     }
 
     List<Partition> partitions(final List<Integer> values,

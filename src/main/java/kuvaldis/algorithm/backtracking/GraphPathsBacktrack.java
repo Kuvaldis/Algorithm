@@ -2,9 +2,6 @@ package kuvaldis.algorithm.backtracking;
 
 import kuvaldis.algorithm.graph.nonweighted.domain.Graph;
 import kuvaldis.algorithm.graph.nonweighted.domain.Vertex;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
 
 import java.util.*;
 
@@ -15,14 +12,28 @@ import static java.util.stream.StreamSupport.stream;
 
 public class GraphPathsBacktrack extends AbstractBacktrack<Vertex, Set<List<Vertex>>, GraphPathsBacktrack.Input> {
 
-    @Data
     public static class Input {
-        @Getter(AccessLevel.PRIVATE)
         private final Graph graph;
-        @Getter(AccessLevel.PRIVATE)
         private final Integer from;
-        @Getter(AccessLevel.PRIVATE)
         private final Integer to;
+
+        public Input(final Graph graph, final Integer from, final Integer to) {
+            this.graph = graph;
+            this.from = from;
+            this.to = to;
+        }
+
+        public Graph getGraph() {
+            return graph;
+        }
+
+        public Integer getFrom() {
+            return from;
+        }
+
+        public Integer getTo() {
+            return to;
+        }
     }
 
     private final Set<List<Vertex>> result = new HashSet<>();

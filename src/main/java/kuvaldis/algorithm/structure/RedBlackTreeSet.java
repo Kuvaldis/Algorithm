@@ -1,7 +1,5 @@
 package kuvaldis.algorithm.structure;
 
-import lombok.Data;
-
 import static java.util.Optional.ofNullable;
 
 /**
@@ -21,7 +19,6 @@ public class RedBlackTreeSet<T extends Comparable<T>> {
         RED, BLACK
     }
 
-    @Data
     private static class Node<T> {
         private Node<T> left;
         private Node<T> right;
@@ -33,6 +30,46 @@ public class RedBlackTreeSet<T extends Comparable<T>> {
                      final Node<T> parent) {
             this.value = value;
             this.parent = parent;
+        }
+
+        public Node<T> getLeft() {
+            return left;
+        }
+
+        public void setLeft(final Node<T> left) {
+            this.left = left;
+        }
+
+        public Node<T> getRight() {
+            return right;
+        }
+
+        public void setRight(final Node<T> right) {
+            this.right = right;
+        }
+
+        public Node<T> getParent() {
+            return parent;
+        }
+
+        public void setParent(final Node<T> parent) {
+            this.parent = parent;
+        }
+
+        public Color getColor() {
+            return color;
+        }
+
+        public void setColor(final Color color) {
+            this.color = color;
+        }
+
+        public T getValue() {
+            return value;
+        }
+
+        public void setValue(final T value) {
+            this.value = value;
         }
     }
 

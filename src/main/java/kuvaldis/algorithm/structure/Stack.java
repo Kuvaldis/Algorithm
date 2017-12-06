@@ -1,8 +1,5 @@
 package kuvaldis.algorithm.structure;
 
-import lombok.Data;
-import lombok.ToString;
-
 import java.util.Optional;
 
 public class Stack<E> {
@@ -33,10 +30,32 @@ public class Stack<E> {
         return size;
     }
 
-    @Data
-    @ToString(of = "item")
     public class Element {
         private final E item;
         private Element next;
+
+        public Element(final E item) {
+            this.item = item;
+        }
+
+        public E getItem() {
+            return item;
+        }
+
+        public Element getNext() {
+            return next;
+        }
+
+        public void setNext(final Element next) {
+            this.next = next;
+        }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder("Element{");
+            sb.append("item=").append(item);
+            sb.append('}');
+            return sb.toString();
+        }
     }
 }

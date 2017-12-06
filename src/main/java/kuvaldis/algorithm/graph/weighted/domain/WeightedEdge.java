@@ -1,14 +1,28 @@
 package kuvaldis.algorithm.graph.weighted.domain;
 
-import lombok.Data;
-import lombok.ToString;
-
-@Data
 public class WeightedEdge implements Comparable<WeightedEdge> {
 
     private final WeightedVertex tailVertex;
     private final WeightedVertex headVertex;
     private final Integer weight;
+
+    public WeightedEdge(final WeightedVertex tailVertex, final WeightedVertex headVertex, final Integer weight) {
+        this.tailVertex = tailVertex;
+        this.headVertex = headVertex;
+        this.weight = weight;
+    }
+
+    public WeightedVertex getTailVertex() {
+        return tailVertex;
+    }
+
+    public WeightedVertex getHeadVertex() {
+        return headVertex;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
 
     @Override
     public int compareTo(WeightedEdge o) {

@@ -1,7 +1,6 @@
 package kuvaldis.algorithm.backtracking.sudoku;
 
 import kuvaldis.algorithm.backtracking.AbstractBacktrack;
-import lombok.Data;
 
 import java.util.*;
 import java.util.function.Function;
@@ -17,10 +16,22 @@ import static kuvaldis.algorithm.backtracking.sudoku.Board.SQUARE_SIZE;
 
 public class SudokuBacktrack extends AbstractBacktrack<SudokuBacktrack.CellValue, Board, Board> {
 
-    @Data
     protected static class CellValue {
         private final Cell cell;
         private final Integer value;
+
+        public CellValue(final Cell cell, final Integer value) {
+            this.cell = cell;
+            this.value = value;
+        }
+
+        public Cell getCell() {
+            return cell;
+        }
+
+        public Integer getValue() {
+            return value;
+        }
     }
 
     private static final Set<Integer> ALL_POSSIBLE_VALUES = IntStream.range(1, Board.SIZE + 1)

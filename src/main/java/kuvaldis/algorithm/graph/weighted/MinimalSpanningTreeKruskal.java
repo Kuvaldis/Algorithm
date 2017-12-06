@@ -86,10 +86,29 @@ public class MinimalSpanningTreeKruskal {
                 .collect(Collectors.toList());
     }
 
-    @Data
-    @AllArgsConstructor
     private static final class UnionData {
         private WeightedVertex root;
         private int size;
+
+        public UnionData(final WeightedVertex root, final int size) {
+            this.root = root;
+            this.size = size;
+        }
+
+        public WeightedVertex getRoot() {
+            return root;
+        }
+
+        public void setRoot(final WeightedVertex root) {
+            this.root = root;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public void setSize(final int size) {
+            this.size = size;
+        }
     }
 }

@@ -1,20 +1,13 @@
 package kuvaldis.algorithm.dynamic;
 
-import lombok.Data;
-
-import java.time.temporal.ValueRange;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.*;
-import static java.util.stream.Stream.generate;
 import static java.util.stream.Stream.iterate;
 
 /**
@@ -27,12 +20,34 @@ public class NumbersMinimumCountSumSearch {
     private static final Comparator<ItemData> TOTAL_ITEM_COUNT_COMPARATOR =
             (o1, o2) -> o1.totalCount.compareTo(o2.totalCount);
 
-    @Data
     public class ItemData implements Comparable<ItemData> {
         private final Integer cost;
         private final ItemData parent;
         private final Integer additionalCount;
         private final Integer totalCount;
+
+        public ItemData(final Integer cost, final ItemData parent, final Integer additionalCount, final Integer totalCount) {
+            this.cost = cost;
+            this.parent = parent;
+            this.additionalCount = additionalCount;
+            this.totalCount = totalCount;
+        }
+
+        public Integer getCost() {
+            return cost;
+        }
+
+        public ItemData getParent() {
+            return parent;
+        }
+
+        public Integer getAdditionalCount() {
+            return additionalCount;
+        }
+
+        public Integer getTotalCount() {
+            return totalCount;
+        }
 
         @Override
         public int compareTo(@SuppressWarnings("NullableProblems") final ItemData o) {
