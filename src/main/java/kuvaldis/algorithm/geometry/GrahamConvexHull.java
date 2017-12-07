@@ -6,20 +6,16 @@ import java.util.stream.Stream;
 
 public class GrahamConvexHull {
 
-    private final Set<Point> points;
+    private final List<Point> points;
 
     public GrahamConvexHull(final Point... points) {
-        this.points = Stream.of(points).collect(Collectors.toSet());
+        this.points = Stream.of(points).collect(Collectors.toList());
     }
 
-    public Set<Point> build() {
+    public List<Point> build() {
         // 0. It's possible to create a convex hull only out of 3 or more points
         if (points.size() < 3) {
-            return Collections.emptySet();
-        }
-
-        if (points.size() == 3) {
-            return new HashSet<>(points);
+            return Collections.emptyList();
         }
 
         // 1. Pick p0, the point with lowest y coordinate.
@@ -78,6 +74,8 @@ public class GrahamConvexHull {
             }
         }
 
-        return new HashSet<>(stack);
+        Collections.reverse(stack);
+
+        return stack;
     }
 }

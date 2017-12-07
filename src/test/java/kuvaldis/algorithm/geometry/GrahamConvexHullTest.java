@@ -2,13 +2,11 @@ package kuvaldis.algorithm.geometry;
 
 import org.junit.Test;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class GrahamConvexHullTest {
 
@@ -18,11 +16,12 @@ public class GrahamConvexHullTest {
         final GrahamConvexHull hull = new GrahamConvexHull(new Point(3, 4), new Point(2, 1), new Point(5, 2));
 
         // when
-        final Set<Point> result = hull.build();
+        final List<Point> result = hull.build();
 
         // then
-        final Set<Point> expected = Stream.of(new Point(3, 4), new Point(2, 1), new Point(5, 2))
-                .collect(Collectors.toSet());
+        final List<Point> expected = Stream.of(new Point(2, 1),
+                new Point(5, 2), new Point(3, 4))
+                .collect(Collectors.toList());
         assertEquals(expected, result);
     }
 
@@ -33,12 +32,12 @@ public class GrahamConvexHullTest {
                 new Point(2, 1), new Point(5, 2), new Point(4, 6));
 
         // when
-        final Set<Point> result = hull.build();
+        final List<Point> result = hull.build();
 
         // then
-        final Set<Point> expected = Stream.of(new Point(3, 4),
-                new Point(2, 1), new Point(5, 2), new Point(4, 6))
-                .collect(Collectors.toSet());
+        final List<Point> expected = Stream.of(new Point(2, 1),
+                new Point(5, 2), new Point(4, 6), new Point(3, 4))
+                .collect(Collectors.toList());
         assertEquals(expected, result);
     }
 
@@ -50,12 +49,12 @@ public class GrahamConvexHullTest {
                 new Point(4, 2));
 
         // when
-        final Set<Point> result = hull.build();
+        final List<Point> result = hull.build();
 
         // then
-        final Set<Point> expected = Stream.of(new Point(3, 4),
-                new Point(2, 1), new Point(5, 2), new Point(4, 6))
-                .collect(Collectors.toSet());
+        final List<Point> expected = Stream.of(new Point(2, 1),
+                new Point(5, 2), new Point(4, 6), new Point(3, 4))
+                .collect(Collectors.toList());
         assertEquals(expected, result);
     }
 
@@ -78,10 +77,11 @@ public class GrahamConvexHullTest {
         p[12] = new Point(2, 6);
 
         // when
-        final Set<Point> result = new GrahamConvexHull(p).build();
+        final List<Point> result = new GrahamConvexHull(p).build();
 
         // then
-        final Set<Point> expected = Stream.of(p[0], p[1], p[3], p[10], p[12]).collect(Collectors.toSet());
+        final List<Point> expected = Stream.of(p[0], p[1], p[3], p[10], p[12])
+                .collect(Collectors.toList());
         assertEquals(expected, result);
     }
 }
