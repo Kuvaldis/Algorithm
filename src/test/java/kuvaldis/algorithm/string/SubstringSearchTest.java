@@ -26,6 +26,7 @@ public class SubstringSearchTest {
                 {"abc", "cd", -1},
                 {"abc", "abc", 0},
                 {"abc", "abcd", -1},
+                {"klasgkasdjglkasnbnaalsdfjlsfmalkdjfcvclkzqp", "kasnbnaal", 12}
         });
     }
 
@@ -42,6 +43,15 @@ public class SubstringSearchTest {
     public void testSimpleSearch() throws Exception {
         // when
         final int result = new SimpleSubstringSearch().search(s, ss);
+
+        // then
+        assertEquals(expectedIndex, result);
+    }
+
+    @Test
+    public void testRabinKarpSearch() throws Exception {
+        // when
+        final int result = new RabinKarpSubstringSearch().search(s, ss);
 
         // then
         assertEquals(expectedIndex, result);
