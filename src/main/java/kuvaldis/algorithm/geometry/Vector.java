@@ -17,6 +17,28 @@ public class Vector {
         return v1.x() * v2.y() - v2.x() * v1.y();
     }
 
+    public double cos(final Vector v2) {
+        final Vector v1 = this;
+        return v1.dotProduct(v2) / (v1.magnitude() * v2.magnitude());
+    }
+
+    public double magnitude() {
+        return Math.sqrt(Math.pow(x(), 2) + Math.pow(y(), 2));
+    }
+
+    public Point getFrom() {
+        return from;
+    }
+
+    public Point getTo() {
+        return to;
+    }
+
+    private long dotProduct(final Vector v2) {
+        final Vector v1 = this;
+        return v1.x() * v2.x() + v1.y() * v2.y();
+    }
+
     private int x() {
         return to.getX() - from.getX();
     }

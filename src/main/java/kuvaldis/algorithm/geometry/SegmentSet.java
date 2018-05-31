@@ -39,7 +39,8 @@ public class SegmentSet {
         final List<PointWithSegment> pointWithSegments = segments.stream()
                 .flatMap(segment -> Stream.of(new PointWithSegment(segment.leftEnd(), segment, true),
                         new PointWithSegment(segment.rightEnd(), segment, false)))
-                .sorted(Comparator.comparing(PointWithSegment::getPoint))
+                .sorted(Comparator.<PointWithSegment>comparingInt(p -> p.getPoint().getX())
+                        .thenComparingInt(p -> p.getPoint().getY()))
                 .collect(Collectors.toList());
 
         // 2. Two segments may have same start or end points
