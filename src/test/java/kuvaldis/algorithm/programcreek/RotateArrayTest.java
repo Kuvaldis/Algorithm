@@ -13,6 +13,6 @@ public class RotateArrayTest {
         final int[] arr = new int[] {1, 2, 3, 4};
         final int k = 2;
         new RotateArray().rotateArray(arr, k);
-        System.out.println(Arrays.toString(arr));
+        assertArrayEquals(new int[] {3, 4, 1, 2}, arr);
     }
 }
