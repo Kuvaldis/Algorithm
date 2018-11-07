@@ -2,8 +2,7 @@ package kuvaldis.algorithm.programcreek;
 
 import org.junit.Test;
 
-import static kuvaldis.algorithm.programcreek.LowestCommonAncestorBinaryTree.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class LowestCommonAncestorBinaryTreeTest {
 

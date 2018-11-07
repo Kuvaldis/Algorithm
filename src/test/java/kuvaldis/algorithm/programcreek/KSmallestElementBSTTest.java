@@ -1,9 +1,8 @@
 package kuvaldis.algorithm.programcreek;
 
-import kuvaldis.algorithm.programcreek.KSmallestElementBST.TreeNode;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class KSmallestElementBSTTest {
 
