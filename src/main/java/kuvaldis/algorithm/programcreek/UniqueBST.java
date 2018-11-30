@@ -15,15 +15,16 @@ For example, Given n = 3, there are a total of 5 unique BST's.
 public class UniqueBST {
 
     public int calculate(final int n) {
-        final int[] memo = new int[n];
-        memo[0] = 1;
-        for (int i = 1; i < n; i++) {
-            for (int j = 0; j <= i; j++) {
-                int leftMultiplier = j == 0 ? 1 : memo[j - 1];
-                int rightMultiplier = i == j ? 1 : memo[i - j - 1];
+        final int[] memo = new int[n + 1];
+        // memo holds number of combinations for each number of elements
+        memo[0] = 1; // memo[0] - starting point to help. memo[1] - how many combinations for 1 element, memo[2] - 2 elements etc.
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= i; j++) {
+                int leftMultiplier = memo[j - 1]; // j - 1 - how many elements it is to the right of j
+                int rightMultiplier = memo[i - j]; // i - j - how many elements it is to the right of j
                 memo[i] += leftMultiplier * rightMultiplier;
             }
         }
-        return memo[n - 1];
+        return memo[n];
     }
 }
